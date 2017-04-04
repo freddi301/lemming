@@ -5,21 +5,27 @@ import { styles } from './styles';
 
 import { App as AstApp } from '../ast/App';
 import { Ast as AstAst } from '../ast/Ast';
-import { insert } from '../editor';
+import { selected } from '../editor';
 
 export class App extends React.Component<void, { ast: AstApp }, void> {
   selectedLeft = (e: Event) => {
     e.stopPropagation();
-    insert.publish((a: AstAst) => {
-      this.props.ast.left = a;
-      this.forceUpdate();
+    selected.publish({
+      ast: this.props.ast.left,
+      insert: (a: AstAst) => {
+        this.props.ast.left = a;
+        this.forceUpdate();
+      }
     });
   }
   selectedRight = (e: Event) => {
     e.stopPropagation();
-    insert.publish((a: AstAst) => {
-      this.props.ast.right = a;
-      this.forceUpdate();
+    selected.publish({
+      ast: this.props.ast.right,
+      insert: (a: AstAst) => {
+        this.props.ast.right = a;
+        this.forceUpdate();
+      }
     });
   }
   render() {

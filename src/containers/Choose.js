@@ -11,7 +11,7 @@ export class Choose extends React.Component {
   render() {
     const { choose, choises } = this.props;
     return <div>
-      {choose ? choises.map(({ name, newNode }) =>
+      {choose ? choises.map(({ name, newNode }) => 
         <div key={name} onClick={this.change(newNode)}>{name}</div>
       ): null}
     </div>;

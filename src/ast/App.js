@@ -15,4 +15,14 @@ export class App extends Ast {
   render() {
     return <AppComp ast={this}/>;
   }
+  toJSON() {
+    return { type: 'App', left: this.left.toJSON(), right: this.right.toJSON() };
+  }
+  toString() {
+    return `(${String(this.left)} ${String(this.right)})`;
+  }
 }
+
+Ast.jsonParsers.App = o => {
+  return new App({ left: Ast.fromJSON(o.left), right: Ast.fromJSON(o.right) });
+};

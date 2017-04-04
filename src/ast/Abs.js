@@ -16,4 +16,14 @@ export class Abs extends Ast {
   render() {
     return <AbsComp ast={this}/>;
   }
+  toJSON() {
+    return { type: 'Abs', head: this.head.toJSON(), body: this.body.toJSON() };
+  }
+  toString() {
+    return `λ${String(this.head)}.${String(this.body)}`;
+  }
 }
+
+Ast.jsonParsers.Abs = o => {
+  return new Abs({ head: Var.fromJSON(o.head), body: Ast.fromJSON(o.body) });
+};

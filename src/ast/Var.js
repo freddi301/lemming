@@ -13,4 +13,15 @@ export class Var extends Ast {
   render() {
     return <VarComp ast={this}/>;
   }
+  toJSON() {
+    return { type: 'Var', name: this.name };
+  }
+  static fromJSON(o: Object): Var {
+    return new Var({ name: o.name });
+  }
+  toString() {
+    return this.name;
+  }
 }
+
+Ast.jsonParsers.Var = Var.fromJSON;

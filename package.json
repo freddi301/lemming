@@ -78,6 +78,7 @@
   "dependencies": {
     "algonawt": "^0.1.0",
     "glamor": "^2.20.24",
+    "lodash": "^4.17.4",
     "radium": "^0.18.2"
   }
 }
