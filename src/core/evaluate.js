@@ -20,9 +20,11 @@ export class AstNotFoundInScopeError extends Error {
 
 export class InvalidAstError extends Error {
   ast: Ast;
-  constructor(ast: Ast) {
+  scope: Scope;
+  constructor(ast: Ast, scope: Scope) {
     super(`invalid ast`);
     this.ast = ast;
+    this.scope = scope;
   }
 }
 
@@ -48,6 +50,7 @@ export class StringScope {
 export type Evaluated = { lambda: Abs, scope: Scope };
 
 export const evaluate = ({ ast, scope }: { ast: Ast, scope: Scope }): Evaluated => {
+  ast = ast.toLambda();
   if (ast instanceof App) {
     const left = ast.left instanceof Abs ? ast.left : null;
     const right = ast.right instanceof Abs ? ast.right : null;
@@ -58,13 +61,14 @@ export const evaluate = ({ ast, scope }: { ast: Ast, scope: Scope }): Evaluated 
     } else if (right) {
       const r = evaluate({ ast: ast.left, scope });
       return evaluate({ ast: new App({ left: r.lambda, right }), scope: r.scope });
-    } else if (ast.left instanceof Var) {
-      return evaluate({ ast: new App({ left: scope.get(ast.left), right: ast.right }), scope });
+    } else  {
+      const l = evaluate({ ast: ast.left, scope: scope });
+      return evaluate({ ast: new App({ left: l.lambda, right: ast.right }), scope: l.scope });
     }
   } else if (ast instanceof Var) {
     return { lambda: scope.get(ast), scope };
   } else if (ast instanceof Abs) return { lambda: ast, scope };
-  throw new InvalidAstError(ast);
+  throw new InvalidAstError(ast, scope);
 };
 
 export const e = (ast: Ast) => evaluate({ ast, scope: new StringScope() });

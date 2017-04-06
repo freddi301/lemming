@@ -23,7 +23,8 @@
     "doc:lint": "documentation lint src -g",
     "doc:build": "rm -r doc/*; mv src/index.js src/index; documentation build src -g --document-exported -f html -o doc --sort-order alpha; mv src/index src/index.js",
     "precommit": "npm run doc:lint && npm run eslint && npm run flow && npm run checkdeps && npm test && npm run coverage && npm run build",
-    "prepublish": "npm run precommit"
+    "prepublish": "npm run precommit",
+    "checkdeps:unused": "depcheck; npm-check"
   },
   "tags": [
     "lambda"
@@ -56,9 +57,10 @@
     "chai": "3.5.0",
     "codeclimate-test-reporter": "0.4.1",
     "coveralls": "2.12.0",
+    "depcheck": "^0.6.7",
     "documentation": "4.0.0-beta.18",
     "eslint": "3.17.1",
-    "eslint-plugin-flowtype": "2.30.2",
+    "eslint-plugin-flowtype": "^2.30.4",
     "eslint-plugin-react": "^6.10.3",
     "flow-bin": "0.42.0",
     "flow-copy-source": "^1.1.0",
@@ -66,19 +68,17 @@
     "husky": "^0.13.2",
     "istanbul": "0.4.5",
     "mocha": "3.2.0",
+    "npm-check": "^5.4.0",
     "nsp": "2.6.3",
     "nyc": "10.1.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "rxjs": "^5.2.0",
     "uglify-js": "^2.8.5",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "algonawt": "^0.1.0",
     "glamor": "^2.20.24",
-    "lodash": "^4.17.4",
-    "radium": "^0.18.2"
+    "lodash": "^4.17.4"
   }
 }

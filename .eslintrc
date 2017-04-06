@@ -10,8 +10,8 @@
     "plugin:flowtype/recommended"
   ],
   "plugins": [
-    "flowtype",
-    "react"
+    "react",
+    "flowtype"
   ],
   "env": {
     "browser": true,
@@ -21,6 +21,6 @@
   },
   "rules": {
     "semi": ["error", "always"],
-    "object-curly-spacing": ["error", "always"]
+    "object-curly-spacing": ["error", "always"],
   }
 }

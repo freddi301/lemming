@@ -16,7 +16,7 @@ export class Var extends React.Component<void, { ast: AstVar }, { editing: boole
   render() {
     return <div className={`${styles.container}`} onClick={this.editName}>
       {this.state.editing ?
-        <input value={this.state.name} onChange={this.updateName} onBlur={this.changeName} autoFocus/>
+        <input value={this.state.name} onChange={this.updateName} onBlur={this.changeName} autoFocus size={this.state.name.length || 1}/>
         :this.props.ast.name
       }
     </div>;

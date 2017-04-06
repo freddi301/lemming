@@ -11,4 +11,7 @@ export class Ast {
   static fromJSON(o: { type: string }) {
     return Ast.jsonParsers[o.type](o);
   }
+  toLambda(): Ast {
+    return this;
+  }
 }
