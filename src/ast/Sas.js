@@ -20,10 +20,10 @@ export class Sas extends Ast {
   toLambda() {
     return new App({
       left: new Abs({
-        head: this.left,
-        body: this.body
+        head: this.left.toLambda(),
+        body: this.body.toLambda()
       }),
-      right: this.right
+      right: this.right.toLambda()
     });
   }
   render() {

@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "glamor": "^2.20.24",
+    "immutable": "^3.8.1",
     "lodash": "^4.17.4"
   }
 }

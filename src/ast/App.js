@@ -12,8 +12,11 @@ export class App extends Ast {
     this.left = left;
     this.right = right;
   }
-  render() {
-    return <AppComp ast={this}/>;
+  toLambda() {
+    return new App({ left: this.left.toLambda(), right: this.right.toLambda() });
+  }
+  render(extra: ?{ noParens?: boolean }) {
+    return <AppComp ast={this} extra={extra}/>;
   }
   toJSON() {
     return { type: 'App', left: this.left.toJSON(), right: this.right.toJSON() };

@@ -10,6 +10,9 @@ export class Var extends Ast {
     super();
     this.name = name;
   }
+  toLambda() {
+    return new Var({ name: this.name });
+  }
   render() {
     return <VarComp ast={this}/>;
   }

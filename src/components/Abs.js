@@ -18,12 +18,29 @@ export class Abs extends React.Component<void, { ast: AstAbs }, void> {
       }
     });
   }
+  toggleNewLine = () => {
+    this.props.ast.newLine = !this.props.ast.newLine;
+    this.forceUpdate();
+  }
   render() {
-    return <div className={`${styles.container}`}>
-      λ
+    if (this.props.ast.newLine) {
+      return <div className={`${styles.container} ${styles.row}`}>
+        <div className={`${styles.container} ${styles.row}`}>
+          <span>λ</span>
+          {this.props.ast.head.render()}
+          <span onClick={this.toggleNewLine}>.</span>
+        </div>
+        <div className={`${styles.container} ${styles.column}`} onClick={this.selectedBody}>
+          <span>&nbsp;</span>
+          {this.props.ast.body.render()}
+        </div>
+      </div>;
+    }
+    return <div className={`${styles.container} ${styles.row}`}>
+      <span>λ</span>
       {this.props.ast.head.render()}
-      .
-      <div className={`${styles.dib}`} onClick={this.selectedBody}>
+      <span onClick={this.toggleNewLine}>.</span>
+      <div onClick={this.selectedBody}>
         {this.props.ast.body.render()}
       </div>
     </div>;

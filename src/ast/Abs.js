@@ -8,10 +8,14 @@ import { Abs as AbsComp } from '../components/Abs';  // eslint-disable-line no-u
 export class Abs extends Ast {
   head: Var;
   body: Ast;
+  newLine: boolean;
   constructor({ head, body }: { head: Var, body: Ast }) {
     super();
     this.head = head;
     this.body = body;
+  }
+  toLambda() {
+    return new Abs({ head: this.head.toLambda(), body: this.body.toLambda() });
   }
   render() {
     return <AbsComp ast={this}/>;

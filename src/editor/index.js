@@ -7,6 +7,7 @@ import { Var, App, Abs, Sas, Ast } from '../ast';
 import { Choose } from './Choose'; // eslint-disable-line no-unused-vars
 import { Observable } from '../utils';
 import { e as evaluate } from '../core/evaluate';
+import { inf as infere } from '../core/infere';
 import { styles } from './styles';
 
 function load() {
@@ -60,11 +61,24 @@ export const selected: Observable<{
 
 function safeEvaluate(ast) {
   try {
-    const res = evaluate(ast.toLambda());
+    const lambda = ast.toLambda();
+    const res = evaluate(lambda);
+    let inferedString = '';
+    try {
+      const infered = infere(lambda);
+      inferedString += infered.type;
+      inferedString += '\n';
+      inferedString = infered.constraints.stringifyType(infered.type);
+      inferedString += '\n';
+      inferedString += infered.constraints.toString();
+    } catch (e) { inferedString = e.ast.toString(); }
     return <div className={styles.result}>
       <div className={styles.result}>
         {res.lambda.render()}
       </div>
+      <pre className={styles.result}>
+        {inferedString}
+      </pre>
       <div className={`${styles.result} ${styles.column}`}>
         {res.scope.pairs().map(({ key, value }) =>
           <div key={key.name}>

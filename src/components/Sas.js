@@ -29,16 +29,17 @@ export class Sas extends React.Component<void, { ast: AstSas }, void> {
     });
   }
   render() {
-    return <div className={`${styles.container}`}>
-      <div className={`${styles.dib}`}>
-        {this.props.ast.left.render()}
+    return <div className={`${styles.container} ${styles.column}`}>
+      <div className={`${styles.container} ${styles.row}`}>
+        <div>
+          {this.props.ast.left.render()}
+        </div>
+        <span>&nbsp;=&nbsp;</span>
+        <div onClick={this.selectedRight}>
+          {this.props.ast.right.render()}
+        </div>
       </div>
-      &nbsp;=&nbsp;
-      <div className={`${styles.dib}`} onClick={this.selectedRight}>
-        {this.props.ast.right.render()}
-      </div>
-      <br/>
-      <div className={`${styles.dib}`} onClick={this.selectedBody}>
+      <div className={`${styles.container}`} onClick={this.selectedBody}>
         {this.props.ast.body.render()}
       </div>
     </div>;
