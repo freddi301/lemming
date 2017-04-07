@@ -14,7 +14,9 @@ export class Var extends React.Component<void, { ast: AstVar }, { editing: boole
     this.setState({ editing: false });
   };
   finishEditingOnTab = (e: KeyboardEvent) => {
-    if (e.key === 'Tab') this.changeName();
+    if (e.key === 'Tab') {
+      this.changeName();
+    }
   }
   render() {
     return <div className={`${styles.container}`} onClick={this.editName}>

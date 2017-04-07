@@ -13,6 +13,7 @@ export class Var extends Ast {
   toLambda() {
     return new Var({ name: this.name });
   }
+  equals(otherVar: Var): boolean { return this.name === otherVar.name; }
   render() {
     return <VarComp ast={this}/>;
   }

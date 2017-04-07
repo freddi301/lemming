@@ -25,8 +25,8 @@ export class Abs extends React.Component<
     });
   }
   deselectBody = () => { this.setState({ bodyIsSelected: false }); }
-  selectedHead = (e: Event) => {
-    e.stopPropagation();
+  selectedHead = (/*e: Event*/) => {
+    // e.stopPropagation();
     this.setState({ headIsSelected: true });
   }
   deselectHead = () => { this.setState({ headIsSelected: false }); }

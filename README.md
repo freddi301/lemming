@@ -1,3 +1,7 @@
 # Lemming
 
-lambda calculus returns
+typed lambda calculus ide
+
+# Dev
+
+`npm run dev`

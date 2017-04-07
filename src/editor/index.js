@@ -40,7 +40,7 @@ function safeEvaluate(ast) {
       inferedString = infered.constraints.stringifyType(infered.type);
       inferedString += '\n';
       inferedString += infered.constraints.toString();
-    } catch (e) { inferedString = e.ast.toString(); }
+    } catch (e) { inferedString = String(e.ast); }
     return <div className={styles.result}>
       <div className={styles.result}>
         {res.lambda.render()}
