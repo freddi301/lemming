@@ -2,7 +2,7 @@
 
 import { css } from 'glamor';
 
-export const styles = {
+export const styles: {[key: string]: string} = {
   menu: css({
     padding: '2px'
   }),

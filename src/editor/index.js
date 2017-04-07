@@ -5,43 +5,12 @@ import _ from 'lodash';
 
 import { Var, App, Abs, Sas, Ast } from '../ast';
 import { Choose } from './Choose'; // eslint-disable-line no-unused-vars
+import { Menu } from './Menu'; // eslint-disable-line no-unused-vars
 import { Observable } from '../utils';
 import { e as evaluate } from '../core/evaluate';
 import { inf as infere } from '../core/infere';
 import { styles } from './styles';
-
-function load() {
-  const got = localStorage.getItem('demo');
-  if (!got) return null;
-  return Ast.fromJSON(JSON.parse(got));
-}
-
-function loadSnippets() {
-  const got = localStorage.getItem('snippets');
-  if (!got) return null;
-  return JSON.parse(got).map(Ast.fromJSON);
-}
-
-function exportFile(filename, type, data) {
-  const blob = new Blob([data], { type });
-  const elem = window.document.createElement('a');
-  elem.href = window.URL.createObjectURL(blob);
-  elem.download = filename;
-  elem.click();
-}
-
-function importFile(): Promise<Ast> {
-  return new Promise(resolve => {
-    const elem = window.document.createElement('input');
-    elem.type = 'file';
-    elem.addEventListener('change', e => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(Ast.fromJSON(JSON.parse(e.target.result)));
-      reader.readAsText(e.target.files[0]);
-    });
-    elem.click();
-  });
-}
+import { loadSnippets, load, importFile, exportFile } from './storage';
 
 let demo = load() || new Sas({
   left: new Var({ name: 'main' }),
@@ -100,17 +69,13 @@ type EditorState = {
 };
 
 export class Editor extends React.Component<void, {}, EditorState> {
-  state: EditorState = { ast: demo, insert: null };
+  state: EditorState;
   render() {
     return <div className={styles.root}>
-      <div className={styles.menu}>
-        <button onClick={this.save}>save</button>
-        <button onClick={this.export}>export</button>
-        <button onClick={this.import}>import</button>
-      </div>
+      <Menu actions={this}/>
       <div className={styles.main}>
         <div className={styles.left}>
-          <div className={styles.source}>
+          <div className={styles.source} onKeyUp={this.stopTab} onKeyDown={this.stopTab}>
             {demo.render()}
           </div>
           {safeEvaluate(demo)}
@@ -157,12 +122,28 @@ export class Editor extends React.Component<void, {}, EditorState> {
   export = () => {
     exportFile('program.lemming', 'application/json', JSON.stringify(demo));
   }
+  selectRoot = () => {
+    selected.publish({
+      ast: demo,
+      insert: (a: Ast) => {
+        demo = a;
+        this.forceUpdate();
+      }
+    });
+  }
   import = async () => {
     demo = await importFile();
     this.forceUpdate();
   }
+  stopTab = (e: KeyboardEvent) => {
+    if (e.key === 'Tab') {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
   componentWillMount() {
     selected.subscribe(this.choose);
+    this.selectRoot();
   }
   componentWillUnmount() {
     selected.unsubscribe(this.choose);

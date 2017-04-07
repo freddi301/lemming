@@ -31,8 +31,14 @@ export class InvalidAstError extends Error {
 export class StringScope {
   dict: { [id: string]: Abs };
   constructor(dict: { [id: string]: Abs } = {}) { this.dict = dict; }
-  get(i: Var) { const got = this.dict[i.name]; if (!got) throw new AstNotFoundInScopeError(i, this); return got; }
-  set(i: Var, l: Abs) { return new StringScope({ ...this.dict, [i.name]: l }); }
+  get(i: Var): Abs {
+    const got = this.dict[i.name];
+    if (!got) throw new AstNotFoundInScopeError(i, this);
+    return got;
+  }
+  set(i: Var, l: Abs): StringScope {
+    return new StringScope({ ...this.dict, [i.name]: l });
+  }
   pairs() {
     const pairs = [];
     for (const key of Object.keys(this.dict)) {
@@ -67,7 +73,18 @@ export const evaluate = ({ ast, scope }: { ast: Ast, scope: Scope }): Evaluated 
     }
   } else if (ast instanceof Var) {
     return { lambda: scope.get(ast), scope };
-  } else if (ast instanceof Abs) return { lambda: ast, scope };
+  } else if (ast instanceof Abs) {
+    return { lambda: ast, scope };
+    /* TODO: add free variables for inner body reducing
+    return {
+      lambda: new Abs({
+        head: ast.head,
+        body: evaluate({ ast: ast.body, scope }).lambda
+      }),
+      scope
+    };
+    */
+  }
   throw new InvalidAstError(ast, scope);
 };
 
