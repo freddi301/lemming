@@ -1,7 +1,3 @@
-# Lemming
+# [Lemming](https://lemming.surge.sh/)
 
-typed lambda calculus ide
-
-# Dev
-
-`npm run dev`
+lambda calculus ide

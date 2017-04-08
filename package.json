@@ -5,8 +5,7 @@
   "main": "lib/index.js",
   "files": [
     "src",
-    "lib",
-    "app"
+    "lib"
   ],
   "scripts": {
     "eslint": "eslint src && eslint test",
@@ -26,6 +25,8 @@
     "doc:build": "rm -r doc/*; mv src/index.js src/index; documentation build src -g --document-exported -f html -o doc --sort-order alpha; mv src/index src/index.js",
     "precommit": "npm run doc:lint && npm run eslint && npm run flow && npm run checkdeps && npm test && npm run coverage && npm run build",
     "prepublish": "npm run precommit",
+    "postpublish": "npm run surge",
+    "surge": "surge app lemming",
     "checkdeps:unused": "depcheck; npm-check"
   },
   "tags": [
@@ -80,6 +81,7 @@
     "nyc": "10.1.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "surge": "^0.19.0",
     "uglify-js": "^2.8.5",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2"
