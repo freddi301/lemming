@@ -124,7 +124,7 @@ export class Editor extends React.Component<void, {}, EditorState> {
     this.forceUpdate();
   }
   export = () => {
-    exportFile('program.lemming', 'application/json', JSON.stringify(demo, null, 2));
+    exportFile('program.lemming.json', 'application/json', JSON.stringify(demo, null, 2));
   }
   selectRoot = () => {
     selected.publish({
