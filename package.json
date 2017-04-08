@@ -1,5 +1,5 @@
 {
-  "name": "lemming",
+  "name": "lemming-lang",
   "version": "0.0.1",
   "description": "lambda calculus returns",
   "main": "lib/index.js",
