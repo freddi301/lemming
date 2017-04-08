@@ -7,7 +7,12 @@ import { Sas as AstSas } from '../ast/Sas';
 import { Ast as AstAst } from '../ast/Ast';
 import { selected } from '../editor';
 
-export class Sas extends React.Component<void, { ast: AstSas }, void> {
+export class Sas extends React.Component<
+  void,
+  { ast: AstSas },
+  { isLeftSelected: boolean, isRightSelected: boolean, isBodySelected: boolean }
+> {
+  state = { isLeftSelected: false, isRightSelected: false, isBodySelected: false }
   selectedRight = (e: Event) => {
     e.stopPropagation();
     selected.publish({

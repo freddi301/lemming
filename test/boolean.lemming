@@ -1,0 +1,397 @@
+{
+  "type": "Sas",
+  "left": {
+    "type": "Var",
+    "name": "true"
+  },
+  "right": {
+    "type": "Abs",
+    "head": {
+      "type": "Var",
+      "name": "x"
+    },
+    "body": {
+      "type": "Abs",
+      "head": {
+        "type": "Var",
+        "name": "y"
+      },
+      "body": {
+        "type": "Var",
+        "name": "x"
+      }
+    }
+  },
+  "body": {
+    "type": "Sas",
+    "left": {
+      "type": "Var",
+      "name": "false"
+    },
+    "right": {
+      "type": "Abs",
+      "head": {
+        "type": "Var",
+        "name": "x"
+      },
+      "body": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "y"
+        },
+        "body": {
+          "type": "Var",
+          "name": "y"
+        }
+      }
+    },
+    "body": {
+      "type": "Sas",
+      "left": {
+        "type": "Var",
+        "name": "not"
+      },
+      "right": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "p"
+        },
+        "body": {
+          "type": "App",
+          "left": {
+            "type": "App",
+            "left": {
+              "type": "Var",
+              "name": "p"
+            },
+            "right": {
+              "type": "Var",
+              "name": "false"
+            }
+          },
+          "right": {
+            "type": "Var",
+            "name": "true"
+          }
+        }
+      },
+      "body": {
+        "type": "Sas",
+        "left": {
+          "type": "Var",
+          "name": "and"
+        },
+        "right": {
+          "type": "Abs",
+          "head": {
+            "type": "Var",
+            "name": "a"
+          },
+          "body": {
+            "type": "Abs",
+            "head": {
+              "type": "Var",
+              "name": "b"
+            },
+            "body": {
+              "type": "App",
+              "left": {
+                "type": "App",
+                "left": {
+                  "type": "Var",
+                  "name": "a"
+                },
+                "right": {
+                  "type": "Var",
+                  "name": "b"
+                }
+              },
+              "right": {
+                "type": "Var",
+                "name": "false"
+              }
+            }
+          }
+        },
+        "body": {
+          "type": "Sas",
+          "left": {
+            "type": "Var",
+            "name": "or"
+          },
+          "right": {
+            "type": "Abs",
+            "head": {
+              "type": "Var",
+              "name": "a"
+            },
+            "body": {
+              "type": "Abs",
+              "head": {
+                "type": "Var",
+                "name": "b"
+              },
+              "body": {
+                "type": "App",
+                "left": {
+                  "type": "App",
+                  "left": {
+                    "type": "Var",
+                    "name": "a"
+                  },
+                  "right": {
+                    "type": "Var",
+                    "name": "true"
+                  }
+                },
+                "right": {
+                  "type": "Var",
+                  "name": "b"
+                }
+              }
+            }
+          },
+          "body": {
+            "type": "Sas",
+            "left": {
+              "type": "Var",
+              "name": "NotTrue"
+            },
+            "right": {
+              "type": "App",
+              "left": {
+                "type": "Var",
+                "name": "not"
+              },
+              "right": {
+                "type": "Var",
+                "name": "true"
+              }
+            },
+            "body": {
+              "type": "Sas",
+              "left": {
+                "type": "Var",
+                "name": "NotFalse"
+              },
+              "right": {
+                "type": "App",
+                "left": {
+                  "type": "Var",
+                  "name": "not"
+                },
+                "right": {
+                  "type": "Var",
+                  "name": "false"
+                }
+              },
+              "body": {
+                "type": "Sas",
+                "left": {
+                  "type": "Var",
+                  "name": "TrueAndTrue"
+                },
+                "right": {
+                  "type": "App",
+                  "left": {
+                    "type": "App",
+                    "left": {
+                      "type": "Var",
+                      "name": "and"
+                    },
+                    "right": {
+                      "type": "Var",
+                      "name": "true"
+                    }
+                  },
+                  "right": {
+                    "type": "Var",
+                    "name": "true"
+                  }
+                },
+                "body": {
+                  "type": "Sas",
+                  "left": {
+                    "type": "Var",
+                    "name": "TrueAndFalse"
+                  },
+                  "right": {
+                    "type": "Infix",
+                    "left": {
+                      "type": "Var",
+                      "name": "true"
+                    },
+                    "center": {
+                      "type": "Var",
+                      "name": "and"
+                    },
+                    "right": {
+                      "type": "Var",
+                      "name": "false"
+                    }
+                  },
+                  "body": {
+                    "type": "Sas",
+                    "left": {
+                      "type": "Var",
+                      "name": "FalseAndTrue"
+                    },
+                    "right": {
+                      "type": "App",
+                      "left": {
+                        "type": "App",
+                        "left": {
+                          "type": "Var",
+                          "name": "and"
+                        },
+                        "right": {
+                          "type": "Var",
+                          "name": "false"
+                        }
+                      },
+                      "right": {
+                        "type": "Var",
+                        "name": "true"
+                      }
+                    },
+                    "body": {
+                      "type": "Sas",
+                      "left": {
+                        "type": "Var",
+                        "name": "FalseAndFalse"
+                      },
+                      "right": {
+                        "type": "App",
+                        "left": {
+                          "type": "App",
+                          "left": {
+                            "type": "Var",
+                            "name": "and"
+                          },
+                          "right": {
+                            "type": "Var",
+                            "name": "false"
+                          }
+                        },
+                        "right": {
+                          "type": "Var",
+                          "name": "false"
+                        }
+                      },
+                      "body": {
+                        "type": "Sas",
+                        "left": {
+                          "type": "Var",
+                          "name": "TrueOrTrue"
+                        },
+                        "right": {
+                          "type": "App",
+                          "left": {
+                            "type": "App",
+                            "left": {
+                              "type": "Var",
+                              "name": "or"
+                            },
+                            "right": {
+                              "type": "Var",
+                              "name": "true"
+                            }
+                          },
+                          "right": {
+                            "type": "Var",
+                            "name": "true"
+                          }
+                        },
+                        "body": {
+                          "type": "Sas",
+                          "left": {
+                            "type": "Var",
+                            "name": "TrueOrFalse"
+                          },
+                          "right": {
+                            "type": "App",
+                            "left": {
+                              "type": "App",
+                              "left": {
+                                "type": "Var",
+                                "name": "or"
+                              },
+                              "right": {
+                                "type": "Var",
+                                "name": "true"
+                              }
+                            },
+                            "right": {
+                              "type": "Var",
+                              "name": "false"
+                            }
+                          },
+                          "body": {
+                            "type": "Sas",
+                            "left": {
+                              "type": "Var",
+                              "name": "FalseOrTrue"
+                            },
+                            "right": {
+                              "type": "App",
+                              "left": {
+                                "type": "App",
+                                "left": {
+                                  "type": "Var",
+                                  "name": "or"
+                                },
+                                "right": {
+                                  "type": "Var",
+                                  "name": "false"
+                                }
+                              },
+                              "right": {
+                                "type": "Var",
+                                "name": "true"
+                              }
+                            },
+                            "body": {
+                              "type": "Sas",
+                              "left": {
+                                "type": "Var",
+                                "name": "FalseOrFalse"
+                              },
+                              "right": {
+                                "type": "App",
+                                "left": {
+                                  "type": "App",
+                                  "left": {
+                                    "type": "Var",
+                                    "name": "or"
+                                  },
+                                  "right": {
+                                    "type": "Var",
+                                    "name": "false"
+                                  }
+                                },
+                                "right": {
+                                  "type": "Var",
+                                  "name": "false"
+                                }
+                              },
+                              "body": {
+                                "type": "Var",
+                                "name": "TrueAndFalse"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

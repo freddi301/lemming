@@ -3,9 +3,9 @@
 import { Ast, Var, App, Abs } from '../ast';
 
 export interface Scope {
-  get(i: Var): Abs;
-  set(i: Var, l: Abs): Scope;
-  pairs(): Array<{ key: Var, value: Abs }>
+  get(i: Var): Ast;
+  set(i: Var, l: Ast): Scope;
+  pairs(): Array<{ key: Var, value: Ast }>
 }
 
 export class AstNotFoundInScopeError extends Error {
@@ -29,14 +29,14 @@ export class InvalidAstError extends Error {
 }
 
 export class StringScope {
-  dict: { [id: string]: Abs };
-  constructor(dict: { [id: string]: Abs } = {}) { this.dict = dict; }
-  get(i: Var): Abs {
+  dict: { [id: string]: Ast };
+  constructor(dict: { [id: string]: Ast } = {}) { this.dict = dict; }
+  get(i: Var): Ast {
     const got = this.dict[i.name];
     if (!got) throw new AstNotFoundInScopeError(i, this);
     return got;
   }
-  set(i: Var, l: Abs): StringScope {
+  set(i: Var, l: Ast): StringScope {
     return new StringScope({ ...this.dict, [i.name]: l });
   }
   pairs() {
@@ -53,37 +53,41 @@ export class StringScope {
   }
 }
 
-export type Evaluated = { lambda: Abs, scope: Scope };
+export type Evaluated = { ast: Ast, scope: Scope };
 
-export const evaluate = ({ ast, scope }: { ast: Ast, scope: Scope }): Evaluated => {
-  ast = ast.toLambda();
+export const evaluate = ({ ast, scope }: Evaluated): Evaluated => {
   if (ast instanceof App) {
     const left = ast.left instanceof Abs ? ast.left : null;
     const right = ast.right instanceof Abs ? ast.right : null;
     if (left && right) {
       return evaluate({ ast: left.body, scope: scope.set(left.head, right) });
     } else if (left) {
-      return evaluate({ ast: new App({ left, right: evaluate({ ast: ast.right, scope }).lambda }), scope });
+      const rhs = evaluate({ ast: ast.right, scope }).ast;
+      if (rhs instanceof Var) return evaluate({ ast: left.body, scope: scope.set(left.head, rhs) });
+      return evaluate({ ast: new App({ left, right: rhs }), scope });
     } else if (right) {
       const r = evaluate({ ast: ast.left, scope });
-      return evaluate({ ast: new App({ left: r.lambda, right }), scope: r.scope });
+      if (r.ast instanceof Var) return {
+        ast: new App({ left: r.ast, right: evaluate({ ast: right, scope }).ast }), scope };
+      return evaluate({ ast: new App({ left: r.ast, right }), scope: r.scope });
     } else  {
       const l = evaluate({ ast: ast.left, scope: scope });
-      return evaluate({ ast: new App({ left: l.lambda, right: ast.right }), scope: l.scope });
+      if (l.ast instanceof Var) return { scope,
+        ast: new App({ left: l.ast, right: evaluate({ ast: ast.right, scope }).ast }) };
+      return evaluate({ ast: new App({ left: l.ast, right: ast.right }), scope: l.scope });
     }
   } else if (ast instanceof Var) {
-    return { lambda: scope.get(ast), scope };
+    return { ast: scope.get(ast), scope };
   } else if (ast instanceof Abs) {
-    return { lambda: ast, scope };
-    /* TODO: add free variables for inner body reducing
+    // return { lambda: ast, scope };
+    const freeScope = scope.set(ast.head, ast.head);
     return {
-      lambda: new Abs({
+      ast: new Abs({
         head: ast.head,
-        body: evaluate({ ast: ast.body, scope }).lambda
+        body: evaluate({ ast: ast.body, scope: freeScope }).ast
       }),
       scope
     };
-    */
   }
   throw new InvalidAstError(ast, scope);
 };

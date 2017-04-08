@@ -37,7 +37,7 @@ export class Abs extends React.Component<
   render() {
     return <div className={`${styles.container} ${this.props.ast.newLine ? styles.column : styles.row}`}>
       <div className={`${styles.container} ${styles.row}`}>
-        <span>λ</span>
+        <span className={styles.abs}>λ</span>
         <span
           onFocus={this.selectedHead} onBlur={this.deselectHead}
           className={`${styles.container} ${this.state.headIsSelected ? styles.selected : ''}`}

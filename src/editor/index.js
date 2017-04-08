@@ -3,7 +3,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import _ from 'lodash';
 
-import { Var, App, Abs, Sas, Ast } from '../ast';
+import { Var, App, Abs, Sas, Ast, Infix } from '../ast';
 import { Choose } from './Choose'; // eslint-disable-line no-unused-vars
 import { Menu } from './Menu'; // eslint-disable-line no-unused-vars
 import { Observable } from '../utils';
@@ -43,7 +43,7 @@ function safeEvaluate(ast) {
     } catch (e) { inferedString = String(e.ast); }
     return <div className={styles.result}>
       <div className={styles.result}>
-        {res.lambda.render()}
+        {res.ast.render()}
       </div>
       <pre className={styles.result}>
         {inferedString}
@@ -59,6 +59,7 @@ function safeEvaluate(ast) {
   } catch (e) {
     console.error(e); // eslint-disable-line no-console
     if (e.ast) console.dir(e.ast); // eslint-disable-line no-console
+    if (e.scope) console.dir(e.scope); // eslint-disable-line no-console
     return e.message;
   }
 }
@@ -78,9 +79,11 @@ export class Editor extends React.Component<void, {}, EditorState> {
           <div className={styles.source} onKeyUp={this.stopTab} onKeyDown={this.stopTab}>
             {demo.render()}
           </div>
-          {safeEvaluate(demo)}
+          <div className={styles.result}>
+            {safeEvaluate(demo)}
+          </div>
         </div>
-        <div>
+        <div className={styles.right}>
           <div>{this.state.ast.render()}</div>
           <button onClick={this.saveSnippet}>save snippet</button>
           <Choose
@@ -89,7 +92,8 @@ export class Editor extends React.Component<void, {}, EditorState> {
               { name: 'Var', newNode: () => new Var({ name: 'x' }) },
               { name: 'App', newNode: () => new App({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }) }) },
               { name: 'Abs', newNode: () => new Abs({ head: new Var({ name: 'x' }), body: new Var({ name: 'x' }) }) },
-              { name: 'Sas', newNode: () => new Sas({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), body: new Var({ name: 'x' }) }) }
+              { name: 'Sas', newNode: () => new Sas({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), body: new Var({ name: 'x' }) }) },
+              { name: 'Infix', newNode: () => new Infix({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), center: new Var({ name: 'x' }) }) }
             ]}
           />
           <div>
@@ -120,7 +124,7 @@ export class Editor extends React.Component<void, {}, EditorState> {
     this.forceUpdate();
   }
   export = () => {
-    exportFile('program.lemming', 'application/json', JSON.stringify(demo));
+    exportFile('program.lemming', 'application/json', JSON.stringify(demo, null, 2));
   }
   selectRoot = () => {
     selected.publish({

@@ -9,7 +9,9 @@ export const styles: {[key: string]: string} = {
   root: css({
     display: 'flex',
     flexDirection: 'column',
-    height: '100%'
+    height: '100%',
+    backgroundColor: '#282c34',
+    color: '#9da5b4'
   }),
   main: css({
     display: 'flex',
@@ -18,11 +20,14 @@ export const styles: {[key: string]: string} = {
   }),
   left: css({
     display: 'flex',
-    flexGrow: '1',
+    flexGrow: '3',
     flexDirection: 'column'
   }),
+  right: css({
+    flexGrow: '1'
+  }),
   source: css({
-    flexGrow: 2,
+    flexGrow: 5,
     paddingLeft: '2px',
     overflow: 'auto',
   }),
