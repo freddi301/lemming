@@ -9,6 +9,7 @@ export class Menu extends React.Component<void, { actions: Editor }, void> {
     const actions = this.props.actions;
     return <div className={styles.menu}>
       <button onClick={actions.selectRoot}>root</button>
+      <button onClick={actions.run}>run</button>
       <button onClick={actions.save}>save</button>
       <button onClick={actions.export}>export</button>
       <button onClick={actions.import}>import</button>

@@ -28,7 +28,7 @@ export class Var extends React.Component<void, { ast: AstVar }, { editing: boole
           className={styles.seamlessInput}
           onKeyUp={this.finishEditingOnTab}
         />
-        : this.props.ast.name
+        : this.props.ast.name || '_'
       }
     </div>;
   }

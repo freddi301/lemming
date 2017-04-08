@@ -30,7 +30,7 @@ export class InvalidAstError extends Error {
 
 export class StringScope {
   dict: { [id: string]: Ast };
-  constructor(dict: { [id: string]: Ast } = {}) { this.dict = dict; }
+  constructor(dict: { [id: string]: Ast } = Object.create(null)) { this.dict = dict; }
   get(i: Var): Ast {
     const got = this.dict[i.name];
     if (!got) throw new AstNotFoundInScopeError(i, this);
@@ -60,36 +60,40 @@ export const evaluate = ({ ast, scope }: Evaluated): Evaluated => {
     const left = ast.left instanceof Abs ? ast.left : null;
     const right = ast.right instanceof Abs ? ast.right : null;
     if (left && right) {
+      if (left.systemAbstraction) left.systemAbstraction(right);
       return evaluate({ ast: left.body, scope: scope.set(left.head, right) });
     } else if (left) {
       const rhs = evaluate({ ast: ast.right, scope }).ast;
-      if (rhs instanceof Var) return evaluate({ ast: left.body, scope: scope.set(left.head, rhs) });
+      // if (rhs instanceof Var) return evaluate({ ast: left.body, scope: scope.set(left.head, rhs) });
       return evaluate({ ast: new App({ left, right: rhs }), scope });
     } else if (right) {
       const r = evaluate({ ast: ast.left, scope });
-      if (r.ast instanceof Var) return {
-        ast: new App({ left: r.ast, right: evaluate({ ast: right, scope }).ast }), scope };
+      // if (r.ast instanceof Var) return { ast: new App({ left: r.ast, right: evaluate({ ast: right, scope }).ast }), scope };
       return evaluate({ ast: new App({ left: r.ast, right }), scope: r.scope });
     } else  {
       const l = evaluate({ ast: ast.left, scope: scope });
-      if (l.ast instanceof Var) return { scope,
-        ast: new App({ left: l.ast, right: evaluate({ ast: ast.right, scope }).ast }) };
+      //if (l.ast instanceof Var) return { scope, ast: new App({ left: l.ast, right: evaluate({ ast: ast.right, scope }).ast }) };
       return evaluate({ ast: new App({ left: l.ast, right: ast.right }), scope: l.scope });
     }
   } else if (ast instanceof Var) {
     return { ast: scope.get(ast), scope };
   } else if (ast instanceof Abs) {
-    // return { lambda: ast, scope };
-    const freeScope = scope.set(ast.head, ast.head);
+    return { ast, scope };
+    /* const freeScope = scope.set(ast.head, ast.head);
     return {
       ast: new Abs({
         head: ast.head,
         body: evaluate({ ast: ast.body, scope: freeScope }).ast
       }),
       scope
-    };
+    }; */
   }
   throw new InvalidAstError(ast, scope);
 };
 
-export const e = (ast: Ast) => evaluate({ ast, scope: new StringScope() });
+const logit = new Abs({ head: new Var({ name: 'x' }), body: new Var({ name: 'x' }) });
+logit.systemAbstraction = x => console.log(x); // eslint-disable-line
+
+export const SystemAbstractions = new StringScope({ '#logit': logit });
+
+export const e = (ast: Ast) => evaluate({ ast, scope: SystemAbstractions });

@@ -80,7 +80,7 @@ export class Editor extends React.Component<void, {}, EditorState> {
             {demo.render()}
           </div>
           <div className={styles.result}>
-            {safeEvaluate(demo)}
+            {this.result}
           </div>
         </div>
         <div className={styles.right}>
@@ -144,6 +144,11 @@ export class Editor extends React.Component<void, {}, EditorState> {
       e.stopPropagation();
       e.preventDefault();
     }
+  }
+  result: *;
+  run = () => {
+    this.result = safeEvaluate(demo);
+    this.forceUpdate();
   }
   componentWillMount() {
     selected.subscribe(this.choose);

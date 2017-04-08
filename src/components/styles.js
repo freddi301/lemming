@@ -5,7 +5,7 @@ import { css } from 'glamor';
 export const styles = {
   container: css({
     display: 'flex',
-    fontFamily: `monospace`,
+    fontFamily: `'Inconsolata', monospace`,
     borderRadius: '5px',
   }),
   infix: css({ color: '#54afef', fontWeight: 'bold' }),
@@ -25,3 +25,5 @@ export const styles = {
     }
   }),
 };
+
+css.insert(`@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700&subset=latin-ext');`);

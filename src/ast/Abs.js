@@ -9,6 +9,7 @@ export class Abs extends Ast {
   head: Var;
   body: Ast;
   newLine: boolean;
+  systemAbstraction: ?(ast: Ast) => void;
   constructor({ head, body }: { head: Var, body: Ast }) {
     super();
     this.head = head;

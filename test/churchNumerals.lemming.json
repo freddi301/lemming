@@ -1,0 +1,309 @@
+{
+  "type": "Sas",
+  "left": {
+    "type": "Var",
+    "name": "Y"
+  },
+  "right": {
+    "type": "Abs",
+    "head": {
+      "type": "Var",
+      "name": "f"
+    },
+    "body": {
+      "type": "App",
+      "left": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "z"
+        },
+        "body": {
+          "type": "App",
+          "left": {
+            "type": "Var",
+            "name": "f"
+          },
+          "right": {
+            "type": "App",
+            "left": {
+              "type": "Var",
+              "name": "z"
+            },
+            "right": {
+              "type": "Var",
+              "name": "z"
+            }
+          }
+        }
+      },
+      "right": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "z"
+        },
+        "body": {
+          "type": "App",
+          "left": {
+            "type": "Var",
+            "name": "f"
+          },
+          "right": {
+            "type": "App",
+            "left": {
+              "type": "Var",
+              "name": "z"
+            },
+            "right": {
+              "type": "Var",
+              "name": "z"
+            }
+          }
+        }
+      }
+    }
+  },
+  "body": {
+    "type": "Sas",
+    "left": {
+      "type": "Var",
+      "name": "0"
+    },
+    "right": {
+      "type": "Abs",
+      "head": {
+        "type": "Var",
+        "name": "f"
+      },
+      "body": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "x"
+        },
+        "body": {
+          "type": "Var",
+          "name": "x"
+        }
+      }
+    },
+    "body": {
+      "type": "Sas",
+      "left": {
+        "type": "Var",
+        "name": "1"
+      },
+      "right": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "f"
+        },
+        "body": {
+          "type": "Abs",
+          "head": {
+            "type": "Var",
+            "name": "x"
+          },
+          "body": {
+            "type": "App",
+            "left": {
+              "type": "Var",
+              "name": "f"
+            },
+            "right": {
+              "type": "Var",
+              "name": "x"
+            }
+          }
+        }
+      },
+      "body": {
+        "type": "Sas",
+        "left": {
+          "type": "Var",
+          "name": "+"
+        },
+        "right": {
+          "type": "Abs",
+          "head": {
+            "type": "Var",
+            "name": "m"
+          },
+          "body": {
+            "type": "Abs",
+            "head": {
+              "type": "Var",
+              "name": "n"
+            },
+            "body": {
+              "type": "Abs",
+              "head": {
+                "type": "Var",
+                "name": "f"
+              },
+              "body": {
+                "type": "Abs",
+                "head": {
+                  "type": "Var",
+                  "name": "x"
+                },
+                "body": {
+                  "type": "App",
+                  "left": {
+                    "type": "App",
+                    "left": {
+                      "type": "Var",
+                      "name": "m"
+                    },
+                    "right": {
+                      "type": "Var",
+                      "name": "f"
+                    }
+                  },
+                  "right": {
+                    "type": "App",
+                    "left": {
+                      "type": "App",
+                      "left": {
+                        "type": "Var",
+                        "name": "n"
+                      },
+                      "right": {
+                        "type": "Var",
+                        "name": "f"
+                      }
+                    },
+                    "right": {
+                      "type": "Var",
+                      "name": "x"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "body": {
+          "type": "Sas",
+          "left": {
+            "type": "Var",
+            "name": "true"
+          },
+          "right": {
+            "type": "Abs",
+            "head": {
+              "type": "Var",
+              "name": "x"
+            },
+            "body": {
+              "type": "Abs",
+              "head": {
+                "type": "Var",
+                "name": "y"
+              },
+              "body": {
+                "type": "Var",
+                "name": "x"
+              }
+            }
+          },
+          "body": {
+            "type": "Sas",
+            "left": {
+              "type": "Var",
+              "name": "false"
+            },
+            "right": {
+              "type": "Abs",
+              "head": {
+                "type": "Var",
+                "name": "x"
+              },
+              "body": {
+                "type": "Abs",
+                "head": {
+                  "type": "Var",
+                  "name": "y"
+                },
+                "body": {
+                  "type": "Var",
+                  "name": "y"
+                }
+              }
+            },
+            "body": {
+              "type": "Sas",
+              "left": {
+                "type": "Var",
+                "name": "not"
+              },
+              "right": {
+                "type": "Abs",
+                "head": {
+                  "type": "Var",
+                  "name": "p"
+                },
+                "body": {
+                  "type": "App",
+                  "left": {
+                    "type": "App",
+                    "left": {
+                      "type": "Var",
+                      "name": "p"
+                    },
+                    "right": {
+                      "type": "Var",
+                      "name": "false"
+                    }
+                  },
+                  "right": {
+                    "type": "Var",
+                    "name": "true"
+                  }
+                }
+              },
+              "body": {
+                "type": "App",
+                "left": {
+                  "type": "App",
+                  "left": {
+                    "type": "Infix",
+                    "left": {
+                      "type": "Var",
+                      "name": "1"
+                    },
+                    "center": {
+                      "type": "Var",
+                      "name": "+"
+                    },
+                    "right": {
+                      "type": "Var",
+                      "name": "1"
+                    }
+                  },
+                  "right": {
+                    "type": "Var",
+                    "name": "#logit"
+                  }
+                },
+                "right": {
+                  "type": "Abs",
+                  "head": {
+                    "type": "Var",
+                    "name": "x"
+                  },
+                  "body": {
+                    "type": "Var",
+                    "name": "x"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

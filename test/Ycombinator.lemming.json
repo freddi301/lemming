@@ -1,0 +1,71 @@
+{
+  "type": "Sas",
+  "left": {
+    "type": "Var",
+    "name": "Y"
+  },
+  "right": {
+    "type": "Abs",
+    "head": {
+      "type": "Var",
+      "name": "f"
+    },
+    "body": {
+      "type": "App",
+      "left": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "z"
+        },
+        "body": {
+          "type": "App",
+          "left": {
+            "type": "Var",
+            "name": "f"
+          },
+          "right": {
+            "type": "App",
+            "left": {
+              "type": "Var",
+              "name": "z"
+            },
+            "right": {
+              "type": "Var",
+              "name": "z"
+            }
+          }
+        }
+      },
+      "right": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "z"
+        },
+        "body": {
+          "type": "App",
+          "left": {
+            "type": "Var",
+            "name": "f"
+          },
+          "right": {
+            "type": "App",
+            "left": {
+              "type": "Var",
+              "name": "z"
+            },
+            "right": {
+              "type": "Var",
+              "name": "z"
+            }
+          }
+        }
+      }
+    }
+  },
+  "body": {
+    "type": "Var",
+    "name": "Y"
+  }
+}
