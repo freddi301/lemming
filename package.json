@@ -1,6 +1,6 @@
 {
   "name": "lemming",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "lambda calculus returns",
   "main": "lib/index.js",
   "files": [
