@@ -26,6 +26,7 @@ export class Sas extends Ast {
       right: this.right.toLambda()
     });
   }
+  static defaultNewNode = () => new Sas({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), body: new Var({ name: 'x' }) });
   render() {
     return <SasComp ast={this}/>;
   }

@@ -33,6 +33,7 @@ export class Infix extends Ast {
       right: this.right.toJSON()
     };
   }
+  static defaultNewNode = () => new Infix({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), center: new Var({ name: 'x' }) });
   static fromJSON(o: Object): Infix {
     return new Infix({
       left: Ast.fromJSON(o.left),

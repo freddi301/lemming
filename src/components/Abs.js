@@ -40,6 +40,7 @@ export class Abs extends React.Component<
         <span className={styles.abs}>λ</span>
         <span
           onFocus={this.selectedHead} onBlur={this.deselectHead}
+          onKeyUp={this.tabOnHead} onKeyDown={this.stopPropagation}
           className={`${styles.container} ${this.state.headIsSelected ? styles.selected : ''}`}
         >
           {this.props.ast.head.render()}
@@ -56,5 +57,9 @@ export class Abs extends React.Component<
         </div>
       </div>
     </div>;
+  }
+  stopPropagation = (e: Event) => e.stopPropagation();
+  tabOnHead = (e: KeyboardEvent) => {
+    if (e.key === 'Tab') this.selectedBody(e);
   }
 }

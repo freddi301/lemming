@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { styles } from './styles';
-
 import { App as AstApp } from '../ast/App';
 import { Ast as AstAst } from '../ast/Ast';
 import { selected } from '../editor';

@@ -3,7 +3,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import _ from 'lodash';
 
-import { Var, App, Abs, Sas, Ast, Infix } from '../ast';
+import { Var, Abs, Sas, Ast, Infix, App } from '../ast';
 import { Choose } from './Choose'; // eslint-disable-line no-unused-vars
 import { Menu } from './Menu'; // eslint-disable-line no-unused-vars
 import { Observable } from '../utils';
@@ -11,6 +11,7 @@ import { e as evaluate } from '../core/evaluate';
 import { inf as infere } from '../core/infere';
 import { styles } from './styles';
 import { loadSnippets, load, importFile, exportFile } from './storage';
+import { Button } from './Button'; // eslint-disable-line no-unused-vars
 
 let demo = load() || new Sas({
   left: new Var({ name: 'main' }),
@@ -69,7 +70,7 @@ type EditorState = {
   ast: Ast;
 };
 
-export class Editor extends React.Component<void, {}, EditorState> {
+export class Editor extends React.Component {
   state: EditorState;
   render() {
     return <div className={styles.root}>
@@ -85,16 +86,10 @@ export class Editor extends React.Component<void, {}, EditorState> {
         </div>
         <div className={styles.right}>
           <div>{this.state.ast.render()}</div>
-          <button onClick={this.saveSnippet}>save snippet</button>
+          |<Button onClick={this.saveSnippet}>save snippet</Button>|
           <Choose
             choose={this.state.insert}
-            choises={[
-              { name: 'Var', newNode: () => new Var({ name: 'x' }) },
-              { name: 'App', newNode: () => new App({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }) }) },
-              { name: 'Abs', newNode: () => new Abs({ head: new Var({ name: 'x' }), body: new Var({ name: 'x' }) }) },
-              { name: 'Sas', newNode: () => new Sas({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), body: new Var({ name: 'x' }) }) },
-              { name: 'Infix', newNode: () => new Infix({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), center: new Var({ name: 'x' }) }) }
-            ]}
+            choises={choises}
           />
           <div>
             {snippets.map(snippet =>
@@ -145,16 +140,44 @@ export class Editor extends React.Component<void, {}, EditorState> {
       e.preventDefault();
     }
   }
-  result: *;
+  result: React$Element<*>;
   run = () => {
     this.result = safeEvaluate(demo);
     this.forceUpdate();
   }
+  shortCuts = (e: KeyboardEvent) => {
+    if (this.state.insert && e.ctrlKey && e.shiftKey) {
+      if (e.type === 'keyup') {
+        const shortcut = Object.values(choises).find(ch => ch.shortcut === e.key);
+        if (shortcut) {
+          e.stopPropagation();
+          e.preventDefault();
+          this.state.insert(shortcut.new());
+        }
+      }
+      if (e.type == 'keydown') {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }
+  }
   componentWillMount() {
     selected.subscribe(this.choose);
     this.selectRoot();
+    document.body.addEventListener('keyup', this.shortCuts);
+    document.body.addEventListener('keydown', this.shortCuts);
   }
   componentWillUnmount() {
     selected.unsubscribe(this.choose);
+    document.body.removeEventListener('keyup', this.shortCuts);
+    document.body.removeEventListener('keydown', this.shortCuts);
   }
 }
+
+const choises = {
+  Var: { new: Var.defaultNewNode, shortcut: 'K' },
+  App: { new: App.defaultNewNode, shortcut: 'A' },
+  Abs: { new: Abs.defaultNewNode, shortcut: 'L' },
+  Sas: { new: Sas.defaultNewNode, shortcut: '=' },
+  Infix: { new: Infix.defaultNewNode, shortcut: ':' }
+};

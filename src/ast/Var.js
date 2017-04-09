@@ -14,6 +14,7 @@ export class Var extends Ast {
     return new Var({ name: this.name });
   }
   equals(otherVar: Var): boolean { return this.name === otherVar.name; }
+  static defaultNewNode = () => new Var({ name: 'x' });
   render() {
     return <VarComp ast={this}/>;
   }

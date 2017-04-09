@@ -18,6 +18,7 @@ export class Abs extends Ast {
   toLambda() {
     return new Abs({ head: this.head.toLambda(), body: this.body.toLambda() });
   }
+  static defaultNewNode = () => new Abs({ head: new Var({ name: 'x' }), body: new Var({ name: 'x' }) });
   render() {
     return <AbsComp ast={this}/>;
   }

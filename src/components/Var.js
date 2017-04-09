@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { styles } from './styles';
-
 import { Var as AstVar } from '../ast/Var';
 
 export class Var extends React.Component<void, { ast: AstVar }, { editing: boolean, name: string}> {

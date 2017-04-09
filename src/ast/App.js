@@ -2,6 +2,7 @@
 
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { Ast } from './Ast';
+import { Var } from './Var';
 import { App as AppComp } from '../components/App';  // eslint-disable-line no-unused-vars
 
 export class App extends Ast {
@@ -15,6 +16,7 @@ export class App extends Ast {
   toLambda() {
     return new App({ left: this.left.toLambda(), right: this.right.toLambda() });
   }
+  static defaultNewNode = () => new App({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }) });
   render(extra: ?{ noParens?: boolean }) {
     return <AppComp ast={this} extra={extra}/>;
   }
