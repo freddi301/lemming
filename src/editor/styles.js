@@ -3,6 +3,7 @@
 import { css } from 'glamor';
 
 export const styles = {
+  flex: css({ display: 'flex' }),
   menu: css({
     display: 'flex',
     flexDirection: 'column'
@@ -21,22 +22,19 @@ export const styles = {
   }),
   left: css({
     display: 'flex',
-    flexGrow: '3',
+    flexGrow: '5', flexBasis: '5',
     flexDirection: 'column'
   }),
   right: css({
-    flexGrow: '1'
+    display: 'flex',
+    flexGrow: '1', flexBasis: '1',
+    flexDirection: 'column'
   }),
   source: css({
     flexGrow: 5,
-    paddingLeft: '2px',
+    flexBasis: 5,
+    padding: '0px 2px',
     overflow: 'auto',
-  }),
-  result: css({
-    display: 'flex',
-    flexGrow: 1,
-    paddingLeft: '2px',
-    overflow: 'auto'
   }),
   column: css({
     flexDirection: 'column',
@@ -50,3 +48,6 @@ export const styles = {
     width: '1px', height: '100%'
   })
 };
+
+css.insert('*::-webkit-scrollbar { width: 4px; height: 4px; background-color: rgba(255,255,255,0.1); border-radius: 4px; }');
+css.insert('*::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.2); border-radius: 4px; }');

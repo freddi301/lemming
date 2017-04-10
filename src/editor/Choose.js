@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-
+import { Button } from '../components/Button'; // eslint-disable-line no-unused-vars
 import { Ast } from '../ast/Ast';
 import { Key } from './Key'; // eslint-disable-line no-unused-vars
 
@@ -14,7 +14,7 @@ export class Choose extends React.Component {
     return <div>
       {choose ? Object.keys(choises).map(name =>
         <div key={name} onClick={this.change(choises[name].new)}>
-          {name} <Key>ctrl</Key>+<Key>shift</Key>+<Key>{choises[name].shortcut}</Key>
+          <Button>{name}</Button><Key>ctrl</Key>+<Key>{choises[name].shortcut}</Key>
         </div>
       ): null}
     </div>;

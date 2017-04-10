@@ -5,6 +5,7 @@ import { styles } from './styles';
 
 import { Abs as AstAbs } from '../ast/Abs';
 import { Ast as AstAst } from '../ast/Ast';
+import { App as AstApp } from '../ast/App';
 import { selected } from '../editor';
 
 export class Abs extends React.Component<
@@ -40,7 +41,7 @@ export class Abs extends React.Component<
         <span className={styles.abs}>λ</span>
         <span
           onFocus={this.selectedHead} onBlur={this.deselectHead}
-          onKeyUp={this.tabOnHead} onKeyDown={this.stopPropagation}
+          onKeyDown={this.tabOnHead}
           className={`${styles.container} ${this.state.headIsSelected ? styles.selected : ''}`}
         >
           {this.props.ast.head.render()}
@@ -53,7 +54,7 @@ export class Abs extends React.Component<
           onFocus={this.selectedBody} onBlur={this.deselectBody}
           className={`${styles.container} ${this.state.bodyIsSelected ? styles.selected : ''}`}
         >
-          {this.props.ast.body.render()}
+          {this.props.ast.body.render(this.props.ast.body instanceof AstApp ? { noParens: true } : null)}
         </div>
       </div>
     </div>;

@@ -2,9 +2,11 @@
 
 import React from 'react';
 import { styles } from './styles';
-
+import { Button } from './Button'; // eslint-disable-line no-unused-vars
 import { Sas as AstSas } from '../ast/Sas';
 import { Ast as AstAst } from '../ast/Ast';
+import { App as AstApp } from '../ast/App';
+import { Var as AstVar } from '../ast/Var';
 import { selected } from '../editor';
 
 export class Sas extends React.Component<
@@ -33,6 +35,18 @@ export class Sas extends React.Component<
       }
     });
   }
+  addSas = () => {
+    const body = this.props.ast.body;
+    this.props.ast.body = new AstSas({
+      left: new AstVar({ name: 'x' }),
+      right: new AstVar({ name: 'x' }),
+      body
+    });
+    this.forceUpdate();
+  }
+  removeSas = () => {
+    // this.props.parentInsert(this.props.ast.body);
+  }
   render() {
     return <div className={`${styles.container} ${styles.column}`}>
       <div className={`${styles.container} ${styles.row}`}>
@@ -41,8 +55,11 @@ export class Sas extends React.Component<
         </div>
         <span>&nbsp;=&nbsp;</span>
         <div onClick={this.selectedRight}>
-          {this.props.ast.right.render()}
+          {this.props.ast.right.render(this.props.ast.right instanceof AstApp ? { noParens: true } : null)}
         </div>
+        <span>&nbsp;</span>
+        <Button onClick={this.addSas}>+</Button>
+        <Button onClick={this.removeSas}>-</Button>
       </div>
       <div className={`${styles.container}`} onClick={this.selectedBody}>
         {this.props.ast.body.render()}

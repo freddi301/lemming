@@ -1,9 +1,10 @@
 // @flow
 
 import React from 'react'; // eslint-disable-line no-unused-vars
+import type { Children } from 'react';
 import { css } from 'glamor';
 
-export const Key = (props) => <div className={style}>{props.children}</div>;
+export const Key = (props: { children?: Children }) => <div className={style}>{props.children}</div>;
 
 const style = css({
   display: 'inline-block',

@@ -8,10 +8,11 @@ import { Choose } from './Choose'; // eslint-disable-line no-unused-vars
 import { Menu } from './Menu'; // eslint-disable-line no-unused-vars
 import { Observable } from '../utils';
 import { e as evaluate } from '../core/evaluate';
+import type { Scope } from '../core/evaluate';
 import { inf as infere } from '../core/infere';
 import { styles } from './styles';
 import { loadSnippets, load, importFile, exportFile } from './storage';
-import { Button } from './Button'; // eslint-disable-line no-unused-vars
+import { Button } from '../components/Button'; // eslint-disable-line no-unused-vars
 
 let demo = load() || new Sas({
   left: new Var({ name: 'main' }),
@@ -30,68 +31,74 @@ export const selected: Observable<{
 }> = new Observable;
 
 function safeEvaluate(ast) {
+  let inferedString = '';
+  let resultScope;
+  let resultAst;
+  const lambda = ast.toLambda();
   try {
-    const lambda = ast.toLambda();
     const res = evaluate(lambda);
-    let inferedString = '';
-    try {
-      const infered = infere(lambda);
-      inferedString += infered.type;
-      inferedString += '\n';
-      inferedString = infered.constraints.stringifyType(infered.type);
-      inferedString += '\n';
-      inferedString += infered.constraints.toString();
-    } catch (e) { inferedString = String(e.ast); }
-    return <div className={styles.result}>
-      <div className={styles.result}>
-        {res.ast.render()}
-      </div>
-      <pre className={styles.result}>
-        {inferedString}
-      </pre>
-      <div className={`${styles.result} ${styles.column}`}>
-        {res.scope.pairs().map(({ key, value }) =>
-          <div key={key.name}>
-            {key.name} = {value.render()}
-          </div>
-        )}
-      </div>
-    </div>;
-  } catch (e) {
-    console.error(e); // eslint-disable-line no-console
-    if (e.ast) console.dir(e.ast); // eslint-disable-line no-console
-    if (e.scope) console.dir(e.scope); // eslint-disable-line no-console
-    return e.message;
-  }
+    resultScope = res.scope;
+    resultAst = res.ast;
+  } catch (e) { void 0; }
+  try {
+    const infered = infere(lambda);
+    inferedString += infered.type;
+    inferedString += '\n';
+    inferedString = infered.constraints.stringifyType(infered.type);
+    inferedString += '\n';
+    inferedString += infered.constraints.toString();
+  } catch (e) { inferedString = 'inference error'; }
+  return { ast: resultAst, scope: resultScope, typeScope: inferedString };
 }
 
 type EditorState = {
   insert: ?(a: Ast) => void;
   ast: Ast;
+  result: { ast: ?Ast, scope: ?Scope, typeScope: ?string }
 };
 
 export class Editor extends React.Component {
   state: EditorState;
   render() {
-    return <div className={styles.root}>
+    return <div className={styles.root} onKeyUp={this.shortCuts} onKeyDown={this.shortCuts}>
       <Menu actions={this}/>
       <div className={styles.main}>
         <div className={styles.left}>
           <div className={styles.source} onKeyUp={this.stopTab} onKeyDown={this.stopTab}>
             {demo.render()}
           </div>
-          <div className={styles.result}>
-            {this.result}
-          </div>
+          { this.state.result ? <div style={{ flexGrow: 1, flexBasis: 1, display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '0px 5px' }}>Result<div className={styles.hr}></div></div>
+              <div style={{ padding: '0px 5px', overflow: 'auto', flexGrow: 1 }}>
+                {this.state.result.ast ? this.state.result.ast.render() : null}
+              </div>
+            </div>
+            <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '0px 5px' }}>Types<div className={styles.hr}></div></div>
+              <div style={{ padding: '0px 5px', overflow: 'auto', flexGrow: 1, whiteSpace: 'pre' }}>
+                {this.state.result.typeScope}
+              </div>
+            </div>
+            <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '0px 5px' }}>Scope<div className={styles.hr}></div></div>
+              <div style={{ padding: '0px 5px', overflow: 'auto', flexGrow: 1 }}>
+                {this.state.result.scope ? this.state.result.scope.pairs().map(({ key, value }) =>
+                <div key={key.name}>
+                  {key.name} = {value.render()}
+                </div>
+              ) : null}
+              </div>
+            </div>
+          </div> : null}
         </div>
         <div className={styles.right}>
-          <div>{this.state.ast.render()}</div>
-          |<Button onClick={this.saveSnippet}>save snippet</Button>|
-          <Choose
-            choose={this.state.insert}
-            choises={choises}
-          />
-          <div>
+          <div style={{ overflow: 'auto', flexGrow: '2', flexBasis: '2' }}>{this.state.ast.render()}</div>
+          <div style={{ overflow: 'auto', flexGrow: '1', flexBasis: '1' }}>
+            <Choose choose={this.state.insert} choises={choises}/>
+            <Button onClick={this.saveSnippet}>save snippet</Button>
+          </div>
+          <div style={{ overflow: 'auto', flexGrow: '2', flexBasis: '2' }}>
             {snippets.map(snippet =>
               <div key={String(snippet)} onClick={this.insertSnippet(snippet)}>
                 {snippet.render()}
@@ -141,43 +148,31 @@ export class Editor extends React.Component {
     }
   }
   result: React$Element<*>;
-  run = () => {
-    this.result = safeEvaluate(demo);
-    this.forceUpdate();
-  }
+  run = () => this.setState({ result: safeEvaluate(demo) });
   shortCuts = (e: KeyboardEvent) => {
-    if (this.state.insert && e.ctrlKey && e.shiftKey) {
-      if (e.type === 'keyup') {
-        const shortcut = Object.values(choises).find(ch => ch.shortcut === e.key);
-        if (shortcut) {
-          e.stopPropagation();
-          e.preventDefault();
-          this.state.insert(shortcut.new());
-        }
-      }
-      if (e.type == 'keydown') {
+    if (this.state.insert && e.ctrlKey) {
+      const shortcut = Object.keys(choises).map(k => choises[k]).find(ch => ch.shortcut === e.key);
+      if (shortcut) {
         e.stopPropagation();
-        e.preventDefault();
+        e.preventDefault(); // $ExpectError
+        if (e.type === 'keyup') this.state.insert(shortcut.new());
       }
     }
   }
   componentWillMount() {
     selected.subscribe(this.choose);
     this.selectRoot();
-    document.body.addEventListener('keyup', this.shortCuts);
-    document.body.addEventListener('keydown', this.shortCuts);
+    this.run();
   }
   componentWillUnmount() {
     selected.unsubscribe(this.choose);
-    document.body.removeEventListener('keyup', this.shortCuts);
-    document.body.removeEventListener('keydown', this.shortCuts);
   }
 }
 
 const choises = {
-  Var: { new: Var.defaultNewNode, shortcut: 'K' },
-  App: { new: App.defaultNewNode, shortcut: 'A' },
-  Abs: { new: Abs.defaultNewNode, shortcut: 'L' },
-  Sas: { new: Sas.defaultNewNode, shortcut: '=' },
-  Infix: { new: Infix.defaultNewNode, shortcut: ':' }
+  Var: { new: Var.defaultNewNode, shortcut: 'u' },
+  App: { new: App.defaultNewNode, shortcut: 'p' },
+  Abs: { new: Abs.defaultNewNode, shortcut: 'l' },
+  Sas: { new: Sas.defaultNewNode, shortcut: 's' },
+  Infix: { new: Infix.defaultNewNode, shortcut: 'i' }
 };
