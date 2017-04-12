@@ -93,12 +93,12 @@ export class Editor extends React.Component {
           </div> : null}
         </div>
         <div className={styles.right}>
-          <div style={{ overflow: 'auto', flexGrow: '2', flexBasis: '2' }}>{this.state.ast.render()}</div>
-          <div style={{ overflow: 'auto', flexGrow: '1', flexBasis: '1' }}>
+          <div style={{ overflow: 'auto', flexGrow: 2, flexBasis: 2 }}>{this.state.ast.render()}</div>
+          <div style={{ overflow: 'auto', flexGrow: 1, flexBasis: 1 }}>
             <Choose choose={this.state.insert} choises={choises}/>
             <Button onClick={this.saveSnippet}>save snippet</Button>
           </div>
-          <div style={{ overflow: 'auto', flexGrow: '2', flexBasis: '2' }}>
+          <div style={{ overflow: 'auto', flexGrow: 2, flexBasis: 2 }}>
             {snippets.map(snippet =>
               <div key={String(snippet)} onClick={this.insertSnippet(snippet)}>
                 {snippet.render()}
@@ -139,6 +139,7 @@ export class Editor extends React.Component {
   }
   import = async () => {
     demo = await importFile();
+    this.run();
     this.forceUpdate();
   }
   stopTab = (e: KeyboardEvent) => {

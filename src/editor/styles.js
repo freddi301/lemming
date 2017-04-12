@@ -18,20 +18,20 @@ export const styles = {
   main: css({
     display: 'flex',
     flexDirection: 'row',
-    flexGrow: 1
+    flexGrow: '1'
   }),
   left: css({
     display: 'flex',
-    flexGrow: '5', flexBasis: '5',
+    flexGrow: '5', flexBasis: 5,
     flexDirection: 'column'
   }),
   right: css({
     display: 'flex',
-    flexGrow: '1', flexBasis: '1',
+    flexGrow: '1', flexBasis: 1,
     flexDirection: 'column'
   }),
   source: css({
-    flexGrow: 5,
+    flexGrow: '5',
     flexBasis: 5,
     padding: '0px 2px',
     overflow: 'auto',

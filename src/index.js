@@ -1,9 +1,8 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react';
 import ReactDOM from 'react-dom';
-
-import { Editor } from './editor'; // eslint-disable-line no-unused-vars
+import { Editor } from './editor';
 
 ReactDOM.render(
   <Editor/>,

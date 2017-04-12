@@ -1,9 +1,9 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react';
 import { Ast } from './Ast';
 import { Var } from './Var';
-import { App as AppComp } from '../components/App';  // eslint-disable-line no-unused-vars
+import { App as AppComp } from '../components/App';
 
 export class App extends Ast {
   left: Ast;
@@ -17,8 +17,8 @@ export class App extends Ast {
     return new App({ left: this.left.toLambda(), right: this.right.toLambda() });
   }
   static defaultNewNode = () => new App({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }) });
-  render(extra: ?{ noParens?: boolean }) {
-    return <AppComp ast={this} extra={extra}/>;
+  render() {
+    return <AppComp ast={this}/>;
   }
   toJSON() {
     return { type: 'App', left: this.left.toJSON(), right: this.right.toJSON() };

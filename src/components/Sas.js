@@ -5,18 +5,16 @@ import { styles } from './styles';
 import { Button } from './Button'; // eslint-disable-line no-unused-vars
 import { Sas as AstSas } from '../ast/Sas';
 import { Ast as AstAst } from '../ast/Ast';
-import { App as AstApp } from '../ast/App';
 import { Var as AstVar } from '../ast/Var';
 import { selected } from '../editor';
+import { SelectSweetSpot } from './SelectSweetSpot';
 
-export class Sas extends React.Component<
-  void,
-  { ast: AstSas },
-  { isLeftSelected: boolean, isRightSelected: boolean, isBodySelected: boolean }
-> {
+export class Sas extends React.Component {
+  props: { ast: AstSas };
   state = { isLeftSelected: false, isRightSelected: false, isBodySelected: false }
   selectedRight = (e: Event) => {
     e.stopPropagation();
+    this.setState({ isRightSelected: true });
     selected.publish({
       ast: this.props.ast.right,
       insert: (a: AstAst) => {
@@ -25,8 +23,10 @@ export class Sas extends React.Component<
       }
     });
   }
+  deselectRight = () => this.setState({ isRightSelected: false });
   selectedBody = (e: Event) => {
     e.stopPropagation();
+    this.setState({ isBodySelected: true });
     selected.publish({
       ast: this.props.ast.body,
       insert: (a: AstAst) => {
@@ -35,6 +35,7 @@ export class Sas extends React.Component<
       }
     });
   }
+  deselectBody = () => this.setState({ isBodySelected: false });
   addSas = () => {
     const body = this.props.ast.body;
     this.props.ast.body = new AstSas({
@@ -50,20 +51,30 @@ export class Sas extends React.Component<
   render() {
     return <div className={`${styles.container} ${styles.column}`}>
       <div className={`${styles.container} ${styles.row}`}>
-        <div>
+        <div className={`${this.state.isLeftSelected ? styles.selected : ''}`}>
           {this.props.ast.left.render()}
         </div>
-        <span>&nbsp;=&nbsp;</span>
-        <div onClick={this.selectedRight}>
-          {this.props.ast.right.render(this.props.ast.right instanceof AstApp ? { noParens: true } : null)}
+        <span>&nbsp;=<SelectSweetSpot select={this.selectedRight}/></span>
+        <div className={`${styles.container} ${this.state.isRightSelected ? styles.selected : ''}`}>
+          {this.props.ast.right.render()}
         </div>
-        <span>&nbsp;</span>
+        <SelectSweetSpot select={this.selectedBody}/>
         <Button onClick={this.addSas}>+</Button>
-        <Button onClick={this.removeSas}>-</Button>
+        {/*<Button onClick={this.removeSas}>-</Button>*/}
       </div>
-      <div className={`${styles.container}`} onClick={this.selectedBody}>
+      <div className={`${styles.container} ${this.state.isBodySelected ? styles.selected : ''}`}>
         {this.props.ast.body.render()}
       </div>
     </div>;
+  }
+  autoDeselectBody = ({ ast }: { ast: AstAst }) => { if (ast !== this.props.ast.body) this.deselectBody(); };
+  autoDeselectRight = ({ ast }: { ast: AstAst }) => { if (ast !== this.props.ast.right) this.deselectRight(); };
+  componentWillMount() {
+    selected.subscribe(this.autoDeselectBody);
+    selected.subscribe(this.autoDeselectRight);
+  }
+  componentWillUnmount() {
+    selected.unsubscribe(this.autoDeselectBody);
+    selected.unsubscribe(this.autoDeselectRight);
   }
 }

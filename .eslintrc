@@ -1,4 +1,4 @@
-  {
+{
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
@@ -7,7 +7,8 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "plugin:react/recommended"
   ],
   "plugins": [
     "react",
@@ -22,5 +23,6 @@
   "rules": {
     "semi": ["error", "always"],
     "object-curly-spacing": ["error", "always"],
+    "react/prop-types": [0]
   }
 }

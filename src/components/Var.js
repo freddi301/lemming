@@ -12,11 +12,6 @@ export class Var extends React.Component<void, { ast: AstVar }, { editing: boole
     this.props.ast.name = this.state.name;
     this.setState({ editing: false });
   };
-  finishEditingOnTab = (e: KeyboardEvent) => {
-    if (e.key === 'Tab') {
-      this.changeName();
-    }
-  }
   render() {
     return <div className={`${styles.container}`} onClick={this.editName}>
       {this.state.editing ?
@@ -25,7 +20,6 @@ export class Var extends React.Component<void, { ast: AstVar }, { editing: boole
           onChange={this.updateName} onBlur={this.changeName} autoFocus
           style={{ width: `${(this.state.name.length || 1) * 8}px` }}
           className={styles.seamlessInput}
-          onKeyUp={this.finishEditingOnTab}
         />
         : this.props.ast.name || '_'
       }

@@ -2,7 +2,7 @@
   "name": "lemming-lang",
   "version": "0.0.4",
   "description": "lambda calculus returns",
-  "main": "lib/index.js",
+  "main": "src/main.js",
   "files": [
     "src",
     "lib"
@@ -12,7 +12,8 @@
     "flow": "flow check .",
     "checkdeps": "nsp check",
     "test": "mocha test/*.spec.js",
-    "dev": "cd src; webpack-dev-server -d",
+    "dev": "cd src; webpack-dev-server",
+    "electron": "electron .",
     "test:file": "mocha",
     "coverage": "nyc mocha",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
@@ -66,6 +67,7 @@
     "coveralls": "2.12.0",
     "depcheck": "^0.6.7",
     "documentation": "4.0.0-beta.18",
+    "electron": "^1.6.2",
     "eslint": "3.17.1",
     "eslint-plugin-flowtype": "^2.30.4",
     "eslint-plugin-react": "^6.10.3",

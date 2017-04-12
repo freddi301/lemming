@@ -9,6 +9,7 @@ export const styles = {
     borderRadius: '5px',
   }),
   infix: css({ color: '#54afef', fontWeight: 'bold' }),
+  red: css({ color: '#e06c75' }),
   abs: css({ color: '#c678dd', fontWeight: 'bold' }),
   row: css({ flexDirection: 'row' }),
   column: css({ flexDirection: 'column' }),

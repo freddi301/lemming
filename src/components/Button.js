@@ -19,7 +19,6 @@ const style = css({
 export class Button extends React.Component {
   render() {
     const styleOverride = {};
-    if (this.props.circle) styleOverride.borderRadius = '50%';
     return <span className={style} style={styleOverride} {...this.props}>
       {this.props.children}
     </span>;
