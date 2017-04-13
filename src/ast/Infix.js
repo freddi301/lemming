@@ -1,10 +1,8 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
 import { Ast } from './Ast';
 import { Var } from './Var';
 import { App } from './App';
-import { Infix as InfixComp } from '../components/Infix';  // eslint-disable-line no-unused-vars
 
 export class Infix extends Ast {
   left: Ast;
@@ -21,9 +19,6 @@ export class Infix extends Ast {
       left: new App({ left: this.center.toLambda(), right: this.left.toLambda() }),
       right: this.right.toLambda()
     });
-  }
-  render(extra: ?{ noParens?: boolean }) {
-    return <InfixComp ast={this} extra={extra}/>;
   }
   toJSON() {
     return {

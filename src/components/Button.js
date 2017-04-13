@@ -18,8 +18,7 @@ const style = css({
 
 export class Button extends React.Component {
   render() {
-    const styleOverride = {};
-    return <span className={style} style={styleOverride} {...this.props}>
+    return <span className={style} {...this.props}>
       {this.props.children}
     </span>;
   }

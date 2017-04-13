@@ -5,8 +5,12 @@ import { styles } from './styles';
 import { css } from 'glamor';
 import { Abs as AstAbs } from '../ast/Abs';
 import { Ast as AstAst } from '../ast/Ast';
+import { App as AstApp } from '../ast/App';
 import { selected } from '../editor';
 import { SelectSweetSpot } from './SelectSweetSpot';
+import { Var } from './Var';
+import { Ast } from './Ast';
+import { App } from './App';
 
 const style = {
   dot: css({
@@ -17,6 +21,7 @@ const style = {
 };
 
 export class Abs extends React.Component {
+  static defaultProps = { lambda: true };
   props: { ast: AstAbs };
   state = { bodyIsSelected: false, headIsSelected: false };
   selectedBody = (e: Event) => {
@@ -43,22 +48,21 @@ export class Abs extends React.Component {
   render() {
     return <div className={`${styles.container} ${this.props.ast.newLine ? styles.column : styles.row}`}>
       <div className={`${styles.container} ${styles.row}`}>
-        <span className={styles.abs}>λ</span>
-        <span
-          className={`${styles.container} ${this.state.headIsSelected ? styles.selected : ''}`}
-        >
-          {this.props.ast.head.render()}
+        {this.props.lambda ? <span className={styles.abs}>λ</span> : null}
+        <span className={`${styles.container} ${this.state.headIsSelected ? styles.selected : ''}`}>
+          <Var ast={this.props.ast.head}/>
         </span>
         <span className={style.dot} onClick={this.toggleNewLine}>.</span>
       </div>
       <div className={`${styles.container} ${styles.row}`}>
         <SelectSweetSpot select={this.selectedBody}/>
         {this.props.ast.newLine ? <span>&nbsp;</span> : null}
-        <div
-          onFocus={this.selectedBody} onBlur={this.deselectBody}
-          className={`${styles.container} ${this.state.bodyIsSelected ? styles.selected : ''}`}
-        >
-          {this.props.ast.body.render()}
+        <div className={`${styles.container} ${this.state.bodyIsSelected ? styles.selected : ''}`}>
+          {
+            this.props.ast.body instanceof AstAbs ? <Abs ast={this.props.ast.body} lambda={false}/> :
+            this.props.ast.body instanceof AstApp ? <App ast={this.props.ast.body} parens={false}/> :
+            <Ast ast={this.props.ast.body}/>
+          }
         </div>
       </div>
     </div>;

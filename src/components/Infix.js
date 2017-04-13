@@ -8,6 +8,7 @@ import { Var as AstVar } from '../ast/Var';
 import { Infix as AstInfix } from '../ast/Infix';
 import { selected } from '../editor';
 import { css } from 'glamor';
+import { Ast } from './Ast';
 
 const style = {
   parens: {
@@ -70,17 +71,17 @@ export class Infix extends React.Component {
       <div className={`${styles.container} ${styles.row}`}>
         {parens(this, '(')}
         <div className={`${styles.container} ${this.state.leftIsSelected ? styles.selected : ''}`}>
-          {this.props.ast.left.render()}
+          <Ast ast={this.props.ast.left}/>
         </div>
       </div>
       <div className={`${styles.container} ${styles.row} ${this.state.centerIsSelected ? styles.selected : ''} ${styles.infix}`}>
           <SelectSweetSpot select={this.selectedLeft}/>
-          {this.props.ast.center.render()}
+          <Ast ast={this.props.ast.center}/>
           <SelectSweetSpot select={this.selectedRight}/>
       </div>
       <div className={`${styles.container} ${styles.row}`}>
         <div className={`${styles.container} ${this.state.rightIsSelected ? styles.selected : ''}`}>
-          {this.props.ast.right.render()}
+          <Ast ast={this.props.ast.right}/>
         </div>
         {parens(this, ')')}
       </div>

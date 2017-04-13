@@ -27,4 +27,4 @@ export const styles = {
   }),
 };
 
-css.insert(`@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700&subset=latin-ext');`);
+// css.insert(`@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700&subset=latin-ext');`);

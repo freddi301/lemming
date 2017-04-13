@@ -1,11 +1,9 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
 import { Ast } from './Ast';
 import { Var } from './Var';
 import { Abs } from './Abs';
 import { App } from './App';
-import { Sas as SasComp } from '../components/Sas';  // eslint-disable-line no-unused-vars
 
 export class Sas extends Ast {
   left: Var;
@@ -27,9 +25,6 @@ export class Sas extends Ast {
     });
   }
   static defaultNewNode = () => new Sas({ left: new Var({ name: 'x' }), right: new Var({ name: 'x' }), body: new Var({ name: 'x' }) });
-  render() {
-    return <SasComp ast={this}/>;
-  }
   toJSON() {
     return {
       type: 'Sas',

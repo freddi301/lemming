@@ -1,8 +1,6 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
 import { Ast } from './Ast';
-import { Var as VarComp } from '../components/Var'; // eslint-disable-line no-unused-vars
 
 export class Var extends Ast {
   name: string;
@@ -15,9 +13,6 @@ export class Var extends Ast {
   }
   equals(otherVar: Var): boolean { return this.name === otherVar.name; }
   static defaultNewNode = () => new Var({ name: 'x' });
-  render() {
-    return <VarComp ast={this}/>;
-  }
   toJSON() {
     return { type: 'Var', name: this.name };
   }

@@ -1,18 +1,19 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react';
 import _ from 'lodash';
 
 import { Var, Abs, Sas, Ast, Infix, App } from '../ast';
-import { Choose } from './Choose'; // eslint-disable-line no-unused-vars
-import { Menu } from './Menu'; // eslint-disable-line no-unused-vars
+import { Choose } from './Choose';
+import { Menu } from './Menu';
 import { Observable } from '../utils';
 import { e as evaluate } from '../core/evaluate';
 import type { Scope } from '../core/evaluate';
 import { inf as infere } from '../core/infere';
 import { styles } from './styles';
 import { loadSnippets, load, importFile, exportFile } from './storage';
-import { Button } from '../components/Button'; // eslint-disable-line no-unused-vars
+import { Button } from '../components/Button';
+import { Ast as AstComp } from '../components/Ast';
 
 let demo = load() || new Sas({
   left: new Var({ name: 'main' }),
@@ -65,13 +66,13 @@ export class Editor extends React.Component {
       <div className={styles.main}>
         <div className={styles.left}>
           <div className={styles.source} onKeyUp={this.stopTab} onKeyDown={this.stopTab}>
-            {demo.render()}
+            <AstComp ast={demo}/>
           </div>
           { this.state.result ? <div style={{ flexGrow: 1, flexBasis: 1, display: 'flex', flexDirection: 'row' }}>
             <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
               <div style={{ padding: '0px 5px' }}>Result<div className={styles.hr}></div></div>
               <div style={{ padding: '0px 5px', overflow: 'auto', flexGrow: 1 }}>
-                {this.state.result.ast ? this.state.result.ast.render() : null}
+                {this.state.result.ast ? <AstComp ast={this.state.result.ast}/> : null}
               </div>
             </div>
             <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
@@ -84,8 +85,8 @@ export class Editor extends React.Component {
               <div style={{ padding: '0px 5px' }}>Scope<div className={styles.hr}></div></div>
               <div style={{ padding: '0px 5px', overflow: 'auto', flexGrow: 1 }}>
                 {this.state.result.scope ? this.state.result.scope.pairs().map(({ key, value }) =>
-                <div key={key.name}>
-                  {key.name} = {value.render()}
+                <div key={key.name} style={{ display: 'flex', flexDirection: 'row' }}>
+                  <span>{key.name} = </span><AstComp ast={value}/>
                 </div>
               ) : null}
               </div>
@@ -93,7 +94,7 @@ export class Editor extends React.Component {
           </div> : null}
         </div>
         <div className={styles.right}>
-          <div style={{ overflow: 'auto', flexGrow: 2, flexBasis: 2 }}>{this.state.ast.render()}</div>
+          <div style={{ overflow: 'auto', flexGrow: 2, flexBasis: 2 }}><AstComp ast={this.state.ast}/></div>
           <div style={{ overflow: 'auto', flexGrow: 1, flexBasis: 1 }}>
             <Choose choose={this.state.insert} choises={choises}/>
             <Button onClick={this.saveSnippet}>save snippet</Button>
@@ -101,7 +102,7 @@ export class Editor extends React.Component {
           <div style={{ overflow: 'auto', flexGrow: 2, flexBasis: 2 }}>
             {snippets.map(snippet =>
               <div key={String(snippet)} onClick={this.insertSnippet(snippet)}>
-                {snippet.render()}
+                <AstComp ast={snippet}/>
               </div>
             )}
           </div>

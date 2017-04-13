@@ -1,9 +1,7 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
 import { Ast } from './Ast';
 import { Var } from './Var';
-import { Abs as AbsComp } from '../components/Abs';  // eslint-disable-line no-unused-vars
 
 export class Abs extends Ast {
   head: Var;
@@ -19,9 +17,6 @@ export class Abs extends Ast {
     return new Abs({ head: this.head.toLambda(), body: this.body.toLambda() });
   }
   static defaultNewNode = () => new Abs({ head: new Var({ name: 'x' }), body: new Var({ name: 'x' }) });
-  render() {
-    return <AbsComp ast={this}/>;
-  }
   toJSON() {
     return { type: 'Abs', head: this.head.toJSON(), body: this.body.toJSON() };
   }

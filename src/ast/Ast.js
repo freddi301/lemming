@@ -1,8 +1,5 @@
 // @flow
 
-import React from 'react'; // eslint-disable-line no-unused-vars
-import { Ast as AstComp } from '../components/Ast'; // eslint-disable-line no-unused-vars
-
 export class Ast {
   toJSON() { return {}; }
   static jsonParsers: {[key: string]: (o: Object) => Ast} = {};
@@ -12,5 +9,4 @@ export class Ast {
   toLambda(): Ast {
     return this;
   }
-  render(): React$Element<any> { return <AstComp/>; }
 }

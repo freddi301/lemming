@@ -2,12 +2,15 @@
 
 import React from 'react';
 import { styles } from './styles';
-import { Button } from './Button'; // eslint-disable-line no-unused-vars
+import { Button } from './Button';
 import { Sas as AstSas } from '../ast/Sas';
 import { Ast as AstAst } from '../ast/Ast';
 import { Var as AstVar } from '../ast/Var';
+import { App as AstApp } from '../ast/App';
 import { selected } from '../editor';
 import { SelectSweetSpot } from './SelectSweetSpot';
+import { Ast } from './Ast';
+import { App } from './App';
 
 export class Sas extends React.Component {
   props: { ast: AstSas };
@@ -52,18 +55,24 @@ export class Sas extends React.Component {
     return <div className={`${styles.container} ${styles.column}`}>
       <div className={`${styles.container} ${styles.row}`}>
         <div className={`${this.state.isLeftSelected ? styles.selected : ''}`}>
-          {this.props.ast.left.render()}
+          <Ast ast={this.props.ast.left}/>
         </div>
-        <span>&nbsp;=<SelectSweetSpot select={this.selectedRight}/></span>
+        <span>
+          &nbsp;=
+          <SelectSweetSpot select={this.selectedRight}/>
+        </span>
         <div className={`${styles.container} ${this.state.isRightSelected ? styles.selected : ''}`}>
-          {this.props.ast.right.render()}
+          {
+            this.props.ast.right instanceof AstApp ? <App ast={this.props.ast.right} parens={false}/> :
+            <Ast ast={this.props.ast.right}/>
+          }
         </div>
         <SelectSweetSpot select={this.selectedBody}/>
         <Button onClick={this.addSas}>+</Button>
         {/*<Button onClick={this.removeSas}>-</Button>*/}
       </div>
       <div className={`${styles.container} ${this.state.isBodySelected ? styles.selected : ''}`}>
-        {this.props.ast.body.render()}
+        <Ast ast={this.props.ast.body}/>
       </div>
     </div>;
   }

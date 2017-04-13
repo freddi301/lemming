@@ -7,6 +7,7 @@ import { App as AstApp } from '../ast/App';
 import { Ast as AstAst } from '../ast/Ast';
 import { selected } from '../editor';
 import { SelectSweetSpot } from './SelectSweetSpot';
+import { Ast } from './Ast';
 
 const style = {
   parens: {
@@ -56,13 +57,16 @@ export class App extends React.Component {
         {parens(this, '(')}
         <SelectSweetSpot select={this.selectedLeft}/>
         <div className={`${styles.container} ${this.state.leftIsSelected ? styles.selected : ''}`}>
-          {this.props.ast.left.render()}
+          {this.props.ast.left instanceof AstApp ?
+            <App ast={this.props.ast.left} parens={false}/> :
+            <Ast ast={this.props.ast.left}/>
+          }
         </div>
       </div>
       <span>&nbsp;</span>
       <div className={`${styles.container} ${styles.row}`}>
         <div className={`${styles.container} ${this.state.rightIsSelected ? styles.selected : ''}`}>
-          {this.props.ast.right.render()}
+          <Ast ast={this.props.ast.right}/>
         </div>
         <SelectSweetSpot select={this.selectedRight}/>
         {parens(this, ')')}
