@@ -13,7 +13,7 @@ import { Ast } from './Ast';
 import { App } from './App';
 
 export class Sas extends React.Component {
-  props: { ast: AstSas };
+  props: { ast: AstSas, replaceMe?: (a: AstAst) => void };
   state = { isLeftSelected: false, isRightSelected: false, isBodySelected: false }
   selectedRight = (e: Event) => {
     e.stopPropagation();
@@ -32,11 +32,12 @@ export class Sas extends React.Component {
     this.setState({ isBodySelected: true });
     selected.publish({
       ast: this.props.ast.body,
-      insert: (a: AstAst) => {
-        this.props.ast.body = a;
-        this.forceUpdate();
-      }
+      insert: this.insertBody
     });
+  }
+  insertBody = (a: AstAst) => {
+    this.props.ast.body = a;
+    this.forceUpdate();
   }
   deselectBody = () => this.setState({ isBodySelected: false });
   addSas = () => {
@@ -49,7 +50,7 @@ export class Sas extends React.Component {
     this.forceUpdate();
   }
   removeSas = () => {
-    // this.props.parentInsert(this.props.ast.body);
+    if (this.props.replaceMe) this.props.replaceMe(this.props.ast.body);
   }
   render() {
     return <div className={`${styles.container} ${styles.column}`}>
@@ -69,10 +70,13 @@ export class Sas extends React.Component {
         </div>
         <SelectSweetSpot select={this.selectedBody}/>
         <Button onClick={this.addSas}>+</Button>
-        {/*<Button onClick={this.removeSas}>-</Button>*/}
+        {this.props.replaceMe ? <Button onClick={this.removeSas}>-</Button> : null }
       </div>
       <div className={`${styles.container} ${this.state.isBodySelected ? styles.selected : ''}`}>
-        <Ast ast={this.props.ast.body}/>
+        {
+          this.props.ast.body instanceof AstSas ? <Sas ast={this.props.ast.body} replaceMe={this.insertBody}/> :
+          <Ast ast={this.props.ast.body}/>
+        }
       </div>
     </div>;
   }
