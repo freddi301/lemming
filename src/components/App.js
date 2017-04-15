@@ -5,7 +5,7 @@ import { styles } from './styles';
 import { css } from 'glamor';
 import { App as AstApp } from '../ast/App';
 import { Ast as AstAst } from '../ast/Ast';
-import { selected } from '../editor';
+import { selected, navKeys } from '../editor';
 import { SelectSweetSpot } from './SelectSweetSpot';
 import { Ast } from './Ast';
 
@@ -24,7 +24,7 @@ const parens = (props, char) => (props.props.parens ? <span
 
 export class App extends React.Component {
   static defaultProps = { parens: true };
-  props: { ast: AstApp };
+  props: { ast: AstApp, selectParentLeft?: (e: Event) => void, selectParentRight?: (e: Event) => void };
   state = { leftIsSelected: false, rightIsSelected: false, highlightParens: false }
   selectedLeft = (e: Event) => {
     e.stopPropagation();
@@ -35,6 +35,10 @@ export class App extends React.Component {
         this.props.ast.left = a;
         this.forceUpdate();
       }
+    });
+    navKeys.publish({
+      ArrowRight: this.selectedRight,
+      ...(this.props.selectParentLeft ? { ArrowLeft: this.props.selectParentLeft } : {})
     });
   }
   deselectLeft = () => { this.setState({ leftIsSelected: false }); }
@@ -48,6 +52,10 @@ export class App extends React.Component {
         this.forceUpdate();
       }
     });
+    navKeys.publish({
+      ArrowLeft: this.selectedLeft,
+      ...(this.props.selectParentRight ? { ArrowRight: this.props.selectParentRight } : {})
+    });
   }
   deselectRight = () => { this.setState({ rightIsSelected: false }); }
   render() {
@@ -58,15 +66,15 @@ export class App extends React.Component {
         <SelectSweetSpot select={this.selectedLeft}/>
         <div className={`${styles.container} ${this.state.leftIsSelected ? styles.selected : ''}`}>
           {this.props.ast.left instanceof AstApp ?
-            <App ast={this.props.ast.left} parens={false}/> :
-            <Ast ast={this.props.ast.left}/>
+            <App ast={this.props.ast.left} parens={false} selectParentRight={this.selectedRight}/> :
+            <Ast ast={this.props.ast.left} selectParentRight={this.selectedRight}/>
           }
         </div>
       </div>
       <span>&nbsp;</span>
       <div className={`${styles.container} ${styles.row}`}>
         <div className={`${styles.container} ${this.state.rightIsSelected ? styles.selected : ''}`}>
-          <Ast ast={this.props.ast.right}/>
+          <Ast ast={this.props.ast.right} selectParentLeft={this.selectedLeft}/>
         </div>
         <SelectSweetSpot select={this.selectedRight}/>
         {parens(this, ')')}

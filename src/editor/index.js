@@ -31,6 +31,11 @@ export const selected: Observable<{
   ast: Ast
 }> = new Observable;
 
+export const navKeys: Observable<{
+  [key: string]: (e: KeyboardEvent) => void
+}> = new Observable;
+
+
 function safeEvaluate(ast) {
   let inferedString = '';
   let resultScope;
@@ -55,7 +60,8 @@ function safeEvaluate(ast) {
 type EditorState = {
   insert: ?(a: Ast) => void;
   ast: Ast;
-  result: { ast: ?Ast, scope: ?Scope, typeScope: ?string }
+  result: { ast: ?Ast, scope: ?Scope, typeScope: ?string };
+  navKeys: {[key: string]: (e: KeyboardEvent) => void}
 };
 
 export class Editor extends React.Component {
@@ -161,13 +167,28 @@ export class Editor extends React.Component {
       }
     }
   }
+  onNavKeys = (e: KeyboardEvent) => {
+    if (e.type === 'keyup' && e.key in this.state.navKeys) {
+      this.state.navKeys[e.key](e);
+    }
+  }
+  setNavKeys = (keys: {[key: string]: (e: KeyboardEvent) => void}) => {
+    this.setState(state => ({ ...state, navKeys: { ...state.navKeys, ...keys } }));
+  }
   componentWillMount() {
     selected.subscribe(this.choose);
+    navKeys.subscribe(this.setNavKeys);
     this.selectRoot();
+    this.setState({ navKeys: {} });
     this.run();
+    if (document.body) document.body.addEventListener('keydown', this.onNavKeys);
+    if (document.body) document.body.addEventListener('keyup', this.onNavKeys);
   }
   componentWillUnmount() {
     selected.unsubscribe(this.choose);
+    navKeys.unsubscribe(this.setNavKeys);
+    if (document.body) document.body.removeEventListener('keydown', this.onNavKeys);
+    if (document.body) document.body.removeEventListener('keyup', this.onNavKeys);
   }
 }
 
