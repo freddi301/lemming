@@ -26,18 +26,13 @@ function match(left: Term, term: Term): ?Array<Rule> {
 }
 
 function sub(rules: Array<Rule>, term: Term): Term {
-  for (let [left, _, right] of rules) { // eslint-disable-line no-unused-vars
+  for (let [left, is, right] of rules) {
+    if (is !== IS) continue;
     const scope = match(left, term);
     if (scope) return subrec(scope.concat(rules), right);
   }
   if (term instanceof Array) {
     return term.map(item => sub(rules, item));
-    /*let i = 0;
-    while(i < term.length) {
-      const subbed = sub(rules, term[i]);
-      if (subbed !== term[i]) return term.slice(0, i).concat([subbed], term.slice(i + 1));
-      i++;
-    }*/
   }
   return term;
 }
