@@ -13,6 +13,7 @@ module.exports = {
       { test: /\.js?$/, loader: 'babel-loader', exclude: [path.resolve(__dirname, '../node_modules')] }
     ]
   },
+  devtool: "source-map",
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',

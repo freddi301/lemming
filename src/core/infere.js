@@ -34,11 +34,20 @@ export class StringTypeScope {
   toString() { return JSON.stringify(this.dict); }
 }
 
-export class Constraint<T> {} // eslint-disable-line no-unused-vars
+export class Constraint<T> {
+  ast: Ast;
+  constructor(ast: Ast) { this.ast = ast; }
+  toStringRec(map: Map<T, List<Constraint<T>>>) { map; throw new Error("must be implemented"); }
+} // eslint-disable-line no-unused-vars
 export class IsAbs<T> extends Constraint<T> {
   head: T; body: T;
-  constructor(head: T, body: T) { super(); this.head = head; this.body = body; }
+  constructor(head: T, body: T, ast: Ast) { super(ast); this.head = head; this.body = body; }
   toString() { return `${String(this.head)} -> ${String(this.body)}`; }
+  toStringRec(map: Map<T, List<Constraint<T>>>) {
+    const head = map.get(this.head) ? map.get(this.head).map(c => c.toStringRec(map)).toJS().join('<>') : String(this.head);
+    const body = map.get(this.body) ? map.get(this.body).map(c => c.toStringRec(map)).toJS().join('<>') : String(this.body);
+    return `(${head} -> ${body})`;
+  }
 }
 
 export class Constraints<Type> {
@@ -62,7 +71,9 @@ export class Constraints<Type> {
     return Object.entries(this.typeToConstraintsMap.toJS())
     .reduce((memo, [key, value]) => {
       const constraints = (value: any).map(String).join('; ');
-      memo.push(`${key} :: ${constraints}`);
+      const expandedConstraints = (value: any).map(c => c.toStringRec(this.typeToConstraintsMap)).join('; ');
+      const asts = (value: any).map(c => String(c.ast)).join('~ ');
+      memo.push(`${asts} :: ${key} ${constraints} | ${expandedConstraints}`);
       return memo;
     }, [])
     .join('\n');
@@ -102,7 +113,7 @@ export function infere(
         typeScope, constraints: inferredRigth.constraints,
       });
       const newConstraints = !constraints.findConstraint(inferredLeft.type, IsAbs).length ? // ensure is only typeholder
-        inferredLeft.constraints.add(inferredLeft.type, new IsAbs(inferredRigth.type, rt)) : inferredLeft.constraints;
+        inferredLeft.constraints.add(inferredLeft.type, new IsAbs(inferredRigth.type, rt, ast)) : inferredLeft.constraints;
       return { type: rt, nextType: inferredLeft.nextType, constraints: newConstraints };
     }
   } else if (ast instanceof Var) {
@@ -111,7 +122,7 @@ export function infere(
     const thisAbsType = nextType;
     const thisAbsHeadType = nextType + 1;
     const inferred = infere({ ast: ast.body, nextType: nextType + 2, typeScope: typeScope.set(ast.head, thisAbsHeadType), constraints });
-    const newConstraints = inferred.constraints.add(thisAbsType, new IsAbs(thisAbsHeadType, inferred.type));
+    const newConstraints = inferred.constraints.add(thisAbsType, new IsAbs(thisAbsHeadType, inferred.type, ast));
     return { type: nextType, nextType: inferred.nextType, constraints: newConstraints };
   }
   throw new InvalidAstError(ast);

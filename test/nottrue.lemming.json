@@ -1,0 +1,93 @@
+{
+  "type": "Sas",
+  "left": {
+    "type": "Var",
+    "name": "true"
+  },
+  "right": {
+    "type": "Abs",
+    "head": {
+      "type": "Var",
+      "name": "x"
+    },
+    "body": {
+      "type": "Abs",
+      "head": {
+        "type": "Var",
+        "name": "y"
+      },
+      "body": {
+        "type": "Var",
+        "name": "x"
+      }
+    }
+  },
+  "body": {
+    "type": "Sas",
+    "left": {
+      "type": "Var",
+      "name": "false"
+    },
+    "right": {
+      "type": "Abs",
+      "head": {
+        "type": "Var",
+        "name": "x"
+      },
+      "body": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "y"
+        },
+        "body": {
+          "type": "Var",
+          "name": "y"
+        }
+      }
+    },
+    "body": {
+      "type": "Sas",
+      "left": {
+        "type": "Var",
+        "name": "not"
+      },
+      "right": {
+        "type": "Abs",
+        "head": {
+          "type": "Var",
+          "name": "p"
+        },
+        "body": {
+          "type": "App",
+          "left": {
+            "type": "App",
+            "left": {
+              "type": "Var",
+              "name": "p"
+            },
+            "right": {
+              "type": "Var",
+              "name": "false"
+            }
+          },
+          "right": {
+            "type": "Var",
+            "name": "true"
+          }
+        }
+      },
+      "body": {
+        "type": "App",
+        "left": {
+          "type": "Var",
+          "name": "not"
+        },
+        "right": {
+          "type": "Var",
+          "name": "true"
+        }
+      }
+    }
+  }
+}
